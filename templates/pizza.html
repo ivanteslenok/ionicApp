@@ -1,0 +1,12 @@
+<ion-view view-title="Pizza">
+    <ion-content>
+        <h1>Pizza {{presentPizza[0].name}}</h1>
+        <p>{{presentPizza[0].discription}}</p>
+        <div>
+            <h2>Ингридиенты</h2>
+            <ul ng-repeat="ingredient in presentPizza[0].ingredients">
+                <li>{{ingredient}}</li>
+            </ul>
+        </div>
+    </ion-content>
+</ion-view>

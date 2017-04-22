@@ -1,0 +1,17 @@
+<ion-view view-title="Pizzas">
+    <ion-content>
+        <ion-list>
+            <ion-item ng-repeat="pizza in pizzas" href="#/app/pizzas/{{pizza.id}}">
+                <h1 class="title">{{pizza.name}}</h1>
+
+                <span>{{pizza.discription}}</span>
+
+                <ul ng-repeat="priceInfo in pizza.prices">
+                    <li>
+                        <span>{{priceInfo.size}} - {{priceInfo.weight}} - {{priceInfo.price}}</span>
+                    </li>
+                </ul>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
