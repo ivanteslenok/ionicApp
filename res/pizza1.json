@@ -1,0 +1,11 @@
+{
+    "id": 1,
+    "name": "Пепперони",
+    "ingredients": ["томатный соус", "Моцарелла", "Пепперони"],
+    "discription": "Идеальное сочетание сыра моцарелла и колбасы папперони",
+    "prices": [
+        { "size": "small", "weight": 380, "price": 7.90 },
+        { "size": "medium", "weight": 670, "price": 12.90 },
+        { "size": "large", "weight": 920, "price": 17.90 }
+    ]
+}

@@ -32,11 +32,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         controller: 'AppCtrl'
     })
 
-    .state('app.search', {
-        url: '/search',
+    .state('app.create-pizza', {
+        url: '/create-pizza',
         views: {
             'menuContent': {
-                templateUrl: 'templates/search.html'
+                templateUrl: 'templates/create-pizza.html',
+                controller: 'PizzaCreatorCtrl'
             }
         }
     })
@@ -51,6 +52,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         }
     })
 
+    .state('app.info', {
+        url: '/info',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/info.html'
+            }
+        }
+    })
+
+    .state('app.contacts', {
+        url: '/contacts',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/contacts.html'
+            }
+        }
+    })
+
     .state('app.single', {
         url: '/pizzas/:pizzaId',
         views: {
@@ -60,6 +79,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             }
         }
     });
+
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/pizzas');
 });

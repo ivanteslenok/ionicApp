@@ -16,17 +16,17 @@ angular.module('starter.controllers', [])
     $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope
     }).then(function(modal) {
-        $scope.modal = modal;
+        $scope.modalLogin = modal;
     });
 
     // Triggered in the login modal to close it
     $scope.closeLogin = function() {
-        $scope.modal.hide();
+        $scope.modalLogin.hide();
     };
 
     // Open the login modal
     $scope.login = function() {
-        $scope.modal.show();
+        $scope.modalLogin.show();
     };
 
     // Perform the login action when the user submits the login form
@@ -39,20 +39,67 @@ angular.module('starter.controllers', [])
             $scope.closeLogin();
         }, 1000);
     };
-})
 
-.controller('PizzasCtrl', function($scope, $http) {
-    $http.get('../res/pizzas.json').success(function(data) {
-        $scope.pizzas = data.pizzas;
+    // Модальное окно для "Корзины"
+    $ionicModal.fromTemplateUrl('templates/shopping-cart.html', {
+        scope: $scope
+    }).then(function(modal) {
+        $scope.modalShoppingCart = modal;
     });
+
+    // Закрыть "Корзину"
+    $scope.closeShoppingCart = function() {
+        $scope.modalShoppingCart.hide();
+    };
+
+    // Открыть "Корзину"
+    $scope.shoppingCart = function() {
+        $scope.modalShoppingCart.show();
+    };
+
+    // Сделать покупку
+    $scope.doPurchase = function() {};
 })
 
-.controller('PizzaCtrl', function($scope, $stateParams, $http) {
+.controller('PizzasCtrl', function($scope, Pizzas) {
+    Pizzas.getAll().then(function(value) {
+        $scope.pizzas = value;
+    });
+
+    $scope.refreshData = function() {
+        Pizzas.getAll().then(function(value) {
+            $scope.pizzas = value;
+        }).finally(function() {
+            // останавливаем иконку загрузки
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+    };
+
+    // $http.get('../res/pizzas.json').success(function(data) {
+    //     $scope.pizzas = data.pizzas;
+    // });
+})
+
+.controller('PizzaCtrl', function($scope, $stateParams, Pizzas) {
     var pizzaId = $stateParams.pizzaId;
 
-    $http.get('../res/pizzas.json').success(function(data) {
-        $scope.presentPizza = data.pizzas.filter(function(elem) {
-            return elem.id == pizzaId;
-        });
+    Pizzas.getOne(pizzaId).then(function(value) {
+        $scope.pizza = value;
     });
+
+    //$scope.presentPizza = Pizzas.getOne(pizzaId);
+
+    // $http.get('../res/pizzas.json').success(function(data) {
+    //     $scope.presentPizza = data.pizzas.filter(function(elem) {
+    //         return elem.id == pizzaId;
+    //     });
+    // });
+})
+
+.controller('ShoppingCartCtrl', function($scope, $ionicModal) {
+
+})
+
+.controller('PizzaCreatorCtrl', function($scope) {
+
 });

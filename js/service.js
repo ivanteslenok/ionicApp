@@ -1,23 +1,28 @@
 angular.module('starter.services', [])
 
-.factory('Pizzas', function($http) {
-    var pizzas;
-
-    $http.get('../res/pizzas.json').success(function(data) {
-        pizzas = data.pizzas;
-    });
-
+.factory('Pizzas', function($http, $q) {
     return {
-        all: function() {
-            return pizzas;
+        getAll: function() {
+            var defered = $q.defer();
+
+            $http.get('../res/pizzas.json')
+                .success(function(data) {
+                    defered.resolve(data.pizzas);
+                });
+
+            return defered.promise;
         },
-        get: function(id) {
-            for (var i = 0; i < pizzas.length; i++) {
-                if (pizzas[i].id === parseInt(id)) {
-                    return pizzas[i];
-                }
-            }
-            return null;
+
+        getOne: function(id) {
+            var defered = $q.defer();
+            var url = '../res/pizza' + id + '.json';
+
+            $http.get(url)
+                .success(function(data) {
+                    defered.resolve(data);
+                });
+
+            return defered.promise;
         }
     };
 });
