@@ -1,28 +1,30 @@
 angular.module('starter.services', [])
 
-.factory('Pizzas', function($http, $q) {
+.service('DataService', function($http, $q) {
+    var pizzas;
+
     return {
-        getAll: function() {
+        loadData: function() {
             var defered = $q.defer();
+            var self = this;
 
             $http.get('../res/pizzas.json')
                 .success(function(data) {
+                    self.pizzas = data.pizzas;
                     defered.resolve(data.pizzas);
                 });
 
             return defered.promise;
         },
 
-        getOne: function(id) {
-            var defered = $q.defer();
-            var url = '../res/pizza' + id + '.json';
+        getPizza: function(id) {
+            for (var i = 0; i < this.pizzas.length; i++) {
+                if (this.pizzas[i].id === parseInt(id)) {
+                    return this.pizzas[i];
+                }
+            }
 
-            $http.get(url)
-                .success(function(data) {
-                    defered.resolve(data);
-                });
-
-            return defered.promise;
+            return null;
         }
     };
 });
