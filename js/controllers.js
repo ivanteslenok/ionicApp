@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ionic'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http) {
 
@@ -15,6 +15,11 @@ angular.module('starter.controllers', [])
         password: ''
     };
 
+    $scope.usernamePlaceholder = 'Введите ваш логин';
+    $scope.passwordPlaceholder = 'Введите ваш пароль';
+    $scope.usernameplaceholderClass = 'loginInput';
+    $scope.passwordPlaceholderClass = 'loginInput';
+
     // Create the login modal that we will use later
     $ionicModal.fromTemplateUrl('templates/login.html', {
         scope: $scope
@@ -22,31 +27,39 @@ angular.module('starter.controllers', [])
         $scope.modalLogin = modal;
     });
 
-    // Triggered in the login modal to close it
-    $scope.closeLogin = function() {
-        $scope.modalLogin.hide();
-    };
-
     // Open the login modal
     $scope.login = function() {
         $scope.modalLogin.show();
     };
 
+    // Triggered in the login modal to close it
+    $scope.closeLogin = function() {
+        $scope.modalLogin.hide();
+    };
+
     // Perform the login action when the user submits the login form
     $scope.doLogin = function() {
         if ($scope.loginData.username.length <= 0) {
+            $scope.usernamePlaceholder = 'Вы не ввели логин';
+            $scope.usernameplaceholderClass = 'loginColorWarn';
             return;
         }
 
         if ($scope.loginData.username.length > 15) {
+            $scope.usernamePlaceholder = 'Слишком длинный логин';
+            $scope.usernameplaceholderClass = 'loginColorWarn';
             return;
         }
 
         if ($scope.loginData.password.length <= 0) {
+            $scope.passwordPlaceholder = 'Вы не ввели пароль';
+            $scope.passwordPlaceholderClass = 'loginColorWarn';
             return;
         }
 
         //$http.post('../res/logins.json');
+
+        $scope.closeLogin();
     };
 
     // Модальное окно для "Корзины"
@@ -56,14 +69,14 @@ angular.module('starter.controllers', [])
         $scope.modalShoppingCart = modal;
     });
 
-    // Закрыть "Корзину"
-    $scope.closeShoppingCart = function() {
-        $scope.modalShoppingCart.hide();
-    };
-
     // Открыть "Корзину"
     $scope.shoppingCart = function() {
         $scope.modalShoppingCart.show();
+    };
+
+    // Закрыть "Корзину"
+    $scope.closeShoppingCart = function() {
+        $scope.modalShoppingCart.hide();
     };
 
     // Сделать покупку
@@ -71,24 +84,35 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PizzasCtrl', function($scope, DataService) {
-    DataService.loadData().then(function(value) {
-        $scope.pizzas = value;
-    });
+    $scope.pizzas = [];
 
-    $scope.refreshData = function() {
-        DataService.loadData().then(function(value) {
-            $scope.pizzas = value;
-        }).finally(function() {
+    function refreshData() {
+        DataService.loadData().then(
+            function(value) {
+                $scope.pizzas = value;
+            },
+            function(reason) {
+                DataService.showAlert('Ошибка хз почему', reason);
+            }
+        ).finally(function() {
             // останавливаем иконку загрузки
             $scope.$broadcast('scroll.refreshComplete');
         });
-    };
+    }
+
+    refreshData();
+
+    $scope.refreshData = refreshData;
+
+    $scope.addPizzaToCart = DataService.addPizzaToCart;
 })
 
 .controller('PizzaCtrl', function($scope, $stateParams, DataService) {
     var pizzaId = $stateParams.pizzaId;
 
     $scope.pizza = DataService.getPizza(pizzaId);
+
+    $scope.addPizzaToCart = DataService.addPizzaToCart;
 })
 
 .controller('ShoppingCartCtrl', function($scope, $ionicModal) {

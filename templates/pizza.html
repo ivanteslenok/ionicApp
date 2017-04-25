@@ -1,12 +1,29 @@
-<ion-view view-title="Pizza">
-    <ion-content>
-        <h1>Pizza {{pizza.name}}</h1>
-        <p>{{pizza.discription}}</p>
+<ion-view view-title="{{pizza.name}}">
+    <ion-content class="padding">
+        <img class="pizzaImg" ng-src="http://ivanteslenok.000webhostapp.com/img/{{pizza.name}}.jpg" />
+
+        <h1 class="title">{{pizza.name}}</h1>
+
+        <div class="pizzaBlock">
+            <span class="pizzaIngredientsTitle">Состав:</span> <br/>
+        </div>
+
+        <div class="pizzaBlock">
+            <span class="pizzaIngredientsText">{{pizza.ingredients}}</span>
+        </div>
+
+        <div class="pizzaBlock">
+            <span class="pizzaIngredientsTitle">Цены:</span> <br/>
+        </div>
+
+        <ul class="pizzaPricesList">
+            <li>Маленькая - {{pizza.smSizePrice}} р.</li>
+            <li>Средняя - {{pizza.mdSizePrice}} р.</li>
+            <li>Большая - {{pizza.lgSizePrice}} р.</li>
+        </ul>
+
         <div>
-            <h2>Ингридиенты</h2>
-            <ul ng-repeat="ingredient in pizza.ingredients">
-                <li>{{ingredient}}</li>
-            </ul>
+            <button class="button button-block button-assertive" onclick="event.preventDefault()" ng-click="addPizzaToCart({{pizza.id}})">В Корзину</button>
         </div>
     </ion-content>
 </ion-view>
