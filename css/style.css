@@ -1,55 +1,77 @@
-.pizzaImg {
-    width: 100%;
-}
-
-.priceTitle {
-    font-style: italic;
-    font-size: 17pt;
-}
-
-.ng-binding {
-    /*white-space: normal;*/
-}
-
-.button-bar {
-    margin-top: 10px;
-}
-
-.action-sheet-option {
-    text-align: center;
-}
-
-.action-sheet-title {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.ingredients {
-    font-size: 14pt;
-}
-
-.pizzaBlock {
-    margin: 10px 0 10px;
-}
-
-.pizzaPricesList {
-    font-size: 15pt;
-}
-
-.pizzaIngredientsTitle {
-    font-style: italic;
-    font-size: 17pt;
-}
-
-.pizzaIngredientsText {
-    font-size: 14pt;
-}
-
-.loginInput::-webkit-input-placeholder {
-    font-size: 14pt;
-}
-
-.loginColorWarn::-webkit-input-placeholder {
-    font-size: 14pt;
-    color: #c0392b;
-}
+    .pizzaImg {
+        width: 100%;
+    }
+    
+    .priceTitle {
+        font-style: italic;
+        font-size: 17pt;
+    }
+    /*чтобы не обрезало текст в меню*/
+    
+    .ng-binding {
+        /*white-space: normal;*/
+    }
+    
+    .button-bar {
+        margin-top: 15px;
+    }
+    
+    .ingredientsTitle {
+        font-size: 14pt;
+    }
+    
+    .ingredients {
+        font-size: 14pt;
+    }
+    
+    .pizzaBlock {
+        margin: 10px 0 10px;
+    }
+    
+    .pizzaPricesList {
+        font-size: 14pt;
+    }
+    
+    .pizzaTitle {
+        font-style: italic;
+        font-size: 16pt;
+        font-weight: bold;
+    }
+    
+    .pizzaIngredientsText {
+        font-size: 14pt;
+    }
+    
+    .formInput::-webkit-input-placeholder {
+        font-size: 14pt;
+    }
+    
+    .formError::-webkit-input-placeholder {
+        color: #c0392b;
+    }
+    
+    .platform-android .action-sheet .button {
+        text-align: center;
+        font-size: 17px;
+        color: dimgray;
+        font-weight: bold;
+    }
+    
+    .action-sheet-title {
+        text-align: center !important;
+        font-size: 20px !important;
+        font-weight: normal !important;
+        background-color: crimson;
+        color: white !important;
+    }
+    
+    .pizzaItem {
+        margin: 2%;
+        padding: 3%;
+        border: 0.5px solid darkgrey;
+        border-radius: 1%;
+    }
+    
+    .padding .item-content {
+        padding: 16px !important;
+    }

@@ -1,25 +1,29 @@
 <ion-modal-view>
     <ion-header-bar class="bar-positive">
-        <h1 class="title">Login</h1>
+        <h1 class="title">Вход</h1>
         <div class="buttons">
-            <button class="button button-clear button-icon ion-android-close" ng-click="closeLogin()">Close</button>
+            <button class="button button-clear button-icon ion-android-close" ng-click="closeLogin()">Закрыть</button>
         </div>
     </ion-header-bar>
     <ion-content>
         <form ng-submit="doLogin()">
             <div class="list">
                 <label class="item item-input">
-                    <span class="input-label">Username</span>
-                    <input type="text" class="{{usernameplaceholderClass}}" placeholder="{{usernamePlaceholder}}" ng-model="loginData.username">
+                    <span class="input-label">Логин</span>
+                    <input type="text" class="formInput {{usernameplaceholderClass}}" placeholder="{{usernamePlaceholder}}" ng-model="loginData.username">
                 </label>
 
                 <label class="item item-input">
-                    <span class="input-label">Password</span>
-                    <input type="password" class="{{passwordPlaceholderClass}}" placeholder="{{passwordPlaceholder}}" ng-model="loginData.password">
+                    <span class="input-label">Пароль</span>
+                    <input type="password" class="formInput {{passwordPlaceholderClass}}" placeholder="{{passwordPlaceholder}}" ng-model="loginData.password">
                 </label>
 
                 <label class="item">
-                    <button class="button button-block button-positive" type="submit">Log in</button>
+                    <button class="button button-block button-positive" type="submit">Войти</button>
+                </label>
+
+                <label class="item">
+                    <button class="button button-block button-assertive" type="button" ng-click="registration()">Регистрация</button>
                 </label>
             </div>
         </form>

@@ -1,29 +1,26 @@
 <ion-view view-title="{{pizza.name}}">
-    <ion-content class="padding">
+    <ion-content class="pizzaItem">
         <img class="pizzaImg" ng-src="http://ivanteslenok.000webhostapp.com/img/{{pizza.name}}.jpg" />
 
         <h1 class="title">{{pizza.name}}</h1>
 
         <div class="pizzaBlock">
-            <span class="pizzaIngredientsTitle">Состав:</span> <br/>
-        </div>
-
-        <div class="pizzaBlock">
+            <span class="pizzaTitle">Состав:</span> <br/>
             <span class="pizzaIngredientsText">{{pizza.ingredients}}</span>
         </div>
 
         <div class="pizzaBlock">
-            <span class="pizzaIngredientsTitle">Цены:</span> <br/>
+            <span class="pizzaTitle">Цены:</span> <br/>
+
+            <ul class="pizzaPricesList">
+                <li>Маленькая - {{pizza.smSizePrice}} р.</li>
+                <li>Средняя - {{pizza.mdSizePrice}} р.</li>
+                <li>Большая - {{pizza.lgSizePrice}} р.</li>
+            </ul>
         </div>
 
-        <ul class="pizzaPricesList">
-            <li>Маленькая - {{pizza.smSizePrice}} р.</li>
-            <li>Средняя - {{pizza.mdSizePrice}} р.</li>
-            <li>Большая - {{pizza.lgSizePrice}} р.</li>
-        </ul>
-
-        <div>
-            <button class="button button-block button-assertive" onclick="event.preventDefault()" ng-click="addPizzaToCart({{pizza.id}})">В Корзину</button>
+        <div class="purchaseButton">
+            <button class="button button-block button-assertive" onclick="event.preventDefault()" ng-click="addPizzaToCart({{pizza.id}})">В корзину</button>
         </div>
     </ion-content>
 </ion-view>

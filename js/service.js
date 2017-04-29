@@ -4,6 +4,12 @@ angular.module('starter.services', ['ionic'])
     var pizzas = [];
     var shoppingCart = [];
 
+    var postConfig = {
+        headers: {
+            'Content-Type': 'json'
+        }
+    };
+
     var showAlert = function(title, text) {
         $ionicPopup.alert({
             title: title,
@@ -32,7 +38,7 @@ angular.module('starter.services', ['ionic'])
                     defered.resolve(data);
                 })
                 .error(function(data, status) {
-                    showAlert('Ошибка сервера', status);
+                    showAlert('Ошибка сервера', data);
                 });
 
             return defered.promise;
@@ -48,13 +54,41 @@ angular.module('starter.services', ['ionic'])
             return shoppingCart;
         },
 
+        registration: function(registrationData) {
+            console.log(registrationData);
+
+            var data = {
+                "username": "ivan",
+                "password": "123",
+                "firstname": "ivan",
+                "lastname": "teslenok",
+                "phone": "123",
+                "street": "street",
+                "house": "1",
+                "entrance": "1",
+                "room": "1",
+                "floor": "1"
+            };
+
+            $http.post('https://ivanteslenok.000webhostapp.com/registration.php', data)
+                .success(function(data, status) {
+                    showAlert('Регистрация прошла успешно', data);
+                    return true;
+                })
+                .error(function(data, status) {
+                    showAlert('Ошибка сервера', data);
+                    return false;
+                });
+        },
+
         addPizzaToCart: function(pizzaId) {
             var pizza = getPizza(pizzaId);
 
             var shoppingCartObj = {
-                name: pizza.name,
-                count: 1,
-                size: ''
+                pizzaId: pizzaId,
+                pizzaName: pizza.name,
+                pizzaCount: 1,
+                pizzaSize: ''
             };
 
             $ionicActionSheet.show({
@@ -69,24 +103,29 @@ angular.module('starter.services', ['ionic'])
                 cancelText: 'Отмена',
 
                 buttonClicked: function(index) {
-                    if (index === 0) {
-                        console.log('1 clicked');
-                        shoppingCartObj.size = 'sm';
+                    switch (index) {
+                        case 0:
+                            shoppingCartObj.pizzaSize = 'sm';
+                            break;
+                        case 1:
+                            shoppingCartObj.pizzaSize = 'md';
+                            break;
+                        case 2:
+                            shoppingCartObj.pizzaSize = 'lg';
+                            break;
                     }
 
-                    if (index === 1) {
-                        console.log('2 clicked');
-                        shoppingCartObj.size = 'md';
+                    testCart = shoppingCart.find(function(elem) {
+                        return elem.pizzaId === pizzaId && elem.pizzaSize === shoppingCartObj.pizzaSize;
+                    });
+
+                    if (!testCart) {
+                        shoppingCart.push(shoppingCartObj);
+                    } else {
+                        testCart.pizzaCount++;
                     }
 
-                    if (index === 2) {
-                        console.log('3 clicked');
-                        shoppingCartObj.size = 'lg';
-                    }
-
-                    shoppingCart.push(shoppingCartObj);
-
-                    // console.log(shoppingCart);
+                    console.log(shoppingCart);
 
                     return true;
                 }
