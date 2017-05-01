@@ -1,0 +1,45 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-balanced">
+        <h1 class="title">Добавление ингреиентов</h1>
+        <div class="buttons">
+            <button class="button button-clear button-icon ion-android-close" ng-click="closeIngredients()">Закрыть</button>
+        </div>
+    </ion-header-bar>
+
+    <ion-content class="ingredientsContent">
+        <ion-slide-box class="ingredientsSlider">
+
+            <ion-slide>
+                <div class="box">
+                    <ion-checkbox ng-repeat="item in sauce" ng-model="item.added">{{item.name}}</ion-checkbox>
+                </div>
+            </ion-slide>
+
+            <ion-slide>
+                <div class="box">
+                    <ion-checkbox ng-repeat="item in cheese" ng-model="item.added">{{item.name}}</ion-checkbox>
+                </div>
+            </ion-slide>
+
+            <ion-slide>
+                <div class="box">
+                    <ion-checkbox ng-repeat="item in sausage" ng-model="item.added">{{item.name}}</ion-checkbox>
+                </div>
+            </ion-slide>
+
+            <ion-slide>
+                <div class="box">
+                    <ion-checkbox ng-repeat="item in meat" ng-model="item.added">{{item.name}}</ion-checkbox>
+                </div>
+            </ion-slide>
+
+        </ion-slide-box>
+    </ion-content>
+
+    <ion-footer-bar class="ingredientsFooter">
+        <button class="button button-block button-balanced" ng-click="nextSlide()">
+            Далее
+            <i class="icon ion-chevron-right ingredientsIcon"></i>
+        </button>
+    </ion-footer-bar>
+</ion-modal-view>

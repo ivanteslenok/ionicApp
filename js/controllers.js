@@ -264,11 +264,7 @@ angular.module('starter.controllers', ['ionic'])
             return;
         }
 
-        var closeMadal = DataService.registration($scope.registrationData);
-
-        if (closeMadal) {
-            $scope.closeRegistration();
-        }
+        DataService.registration($scope.registrationData, $scope.closeRegistration.bind(this));
     };
 
     // Модальное окно для "Корзины"
@@ -301,7 +297,7 @@ angular.module('starter.controllers', ['ionic'])
                 $scope.pizzas = value;
             },
             function(reason) {
-                DataService.showAlert('Ошибка хз почему', reason);
+                DataService.showAlert('Эта ошибка никогда не произойдет', reason);
             }
         ).finally(function() {
             // останавливаем иконку загрузки
@@ -328,6 +324,68 @@ angular.module('starter.controllers', ['ionic'])
 
 })
 
-.controller('PizzaCreatorCtrl', function($scope) {
+.controller('PizzaCreatorCtrl', function($scope, $ionicModal, $ionicSlideBoxDelegate, DataService) {
+    // Создание окна ингредиентов
+    $ionicModal.fromTemplateUrl('templates/ingredients.html', {
+        scope: $scope
+    }).then(function(modal) {
+        $scope.modalIngredients = modal;
+    });
 
+    DataService.loadIngredients().then(
+        function(value) {
+            $scope.ingredients = value;
+
+            $scope.ingredients.forEach(function(elem) {
+                elem.added = false;
+            });
+
+            $scope.sauce = $scope.ingredients.filter(function(elem) {
+                return elem.type === 'соус';
+            });
+
+            $scope.cheese = $scope.ingredients.filter(function(elem) {
+                return elem.type === 'сыр';
+            });
+
+            $scope.sausage = $scope.ingredients.filter(function(elem) {
+                return elem.type === 'колбаса';
+            });
+
+            $scope.meat = $scope.ingredients.filter(function(elem) {
+                return elem.type === 'мясо';
+            });
+
+            // Открытие модального окна ингредиентов
+            $scope.openIngredients = function() {
+                $scope.modalIngredients.show();
+            };
+        },
+        function(reason) {
+            DataService.showAlert('Эта ошибка никогда не произойдет', reason);
+        }
+    );
+
+    //$scope.addPizzaToCart = DataService.addPizzaToCart;
+
+    $scope.deleteItem = function(item) {
+        $scope.items.splice($scope.items.indexOf(item), 1);
+
+        console.log($scope.items);
+    };
+
+    // Закрытие модального окна ингредиентов
+    $scope.closeIngredients = function() {
+        $scope.modalIngredients.hide();
+
+        $scope.items = $scope.ingredients.filter(function(elem) {
+            return elem.added;
+        });
+
+        console.log($scope.items);
+    };
+
+    $scope.nextSlide = function() {
+        $ionicSlideBoxDelegate.next();
+    };
 });

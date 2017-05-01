@@ -2,6 +2,7 @@ angular.module('starter.services', ['ionic'])
 
 .service('DataService', function($http, $q, $ionicPopup, $ionicActionSheet) {
     var pizzas = [];
+    var ingredients = [];
     var shoppingCart = [];
 
     var postConfig = {
@@ -10,10 +11,9 @@ angular.module('starter.services', ['ionic'])
         }
     };
 
-    var showAlert = function(title, text) {
+    var showAlert = function(title) {
         $ionicPopup.alert({
-            title: title,
-            template: text
+            title: title
         });
     };
 
@@ -37,8 +37,8 @@ angular.module('starter.services', ['ionic'])
                     //console.log(data);
                     defered.resolve(data);
                 })
-                .error(function(data, status) {
-                    showAlert('Ошибка сервера', data);
+                .error(function() {
+                    showAlert('Ошибка сервера');
                 });
 
             return defered.promise;
@@ -54,30 +54,40 @@ angular.module('starter.services', ['ionic'])
             return shoppingCart;
         },
 
-        registration: function(registrationData) {
-            console.log(registrationData);
+        loadIngredients: function() {
+            var defered = $q.defer();
 
-            var data = {
-                "username": "ivan",
-                "password": "123",
-                "firstname": "ivan",
-                "lastname": "teslenok",
-                "phone": "123",
-                "street": "street",
-                "house": "1",
-                "entrance": "1",
-                "room": "1",
-                "floor": "1"
-            };
-
-            $http.post('https://ivanteslenok.000webhostapp.com/registration.php', data)
-                .success(function(data, status) {
-                    showAlert('Регистрация прошла успешно', data);
-                    return true;
+            $http.get('https://ivanteslenok.000webhostapp.com/ingredients.php')
+                .success(function(data) {
+                    ingredients = data;
+                    console.log(data);
+                    defered.resolve(data);
                 })
-                .error(function(data, status) {
-                    showAlert('Ошибка сервера', data);
-                    return false;
+                .error(function() {
+                    showAlert('Ошибка сервера');
+                });
+
+            return defered.promise;
+        },
+
+        getIngredients: function() {
+            return ingredients;
+        },
+
+        registration: function(registrationData, closeMethod) {
+            $http.post('https://ivanteslenok.000webhostapp.com/registration.php', registrationData)
+                .success(function(data, status) {
+                    showAlert(data);
+
+                    // if (data.success) {
+                    //     showAlert('Регистрация прошла успешно');
+                    //     closeMethod();
+                    // } else {
+                    //     showAlert('Пользователь с таким логином уже существует');
+                    // }
+                })
+                .error(function() {
+                    showAlert('Ошибка сервера');
                 });
         },
 

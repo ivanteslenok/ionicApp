@@ -1,77 +1,162 @@
-    .pizzaImg {
-        width: 100%;
-    }
-    
-    .priceTitle {
-        font-style: italic;
-        font-size: 17pt;
-    }
-    /*чтобы не обрезало текст в меню*/
-    
-    .ng-binding {
-        /*white-space: normal;*/
-    }
-    
-    .button-bar {
-        margin-top: 15px;
-    }
-    
-    .ingredientsTitle {
-        font-size: 14pt;
-    }
-    
-    .ingredients {
-        font-size: 14pt;
-    }
-    
-    .pizzaBlock {
-        margin: 10px 0 10px;
-    }
-    
-    .pizzaPricesList {
-        font-size: 14pt;
-    }
-    
-    .pizzaTitle {
-        font-style: italic;
-        font-size: 16pt;
-        font-weight: bold;
-    }
-    
-    .pizzaIngredientsText {
-        font-size: 14pt;
-    }
-    
-    .formInput::-webkit-input-placeholder {
-        font-size: 14pt;
-    }
-    
-    .formError::-webkit-input-placeholder {
-        color: #c0392b;
-    }
-    
-    .platform-android .action-sheet .button {
-        text-align: center;
-        font-size: 17px;
-        color: dimgray;
-        font-weight: bold;
-    }
-    
-    .action-sheet-title {
-        text-align: center !important;
-        font-size: 20px !important;
-        font-weight: normal !important;
-        background-color: crimson;
-        color: white !important;
-    }
-    
-    .pizzaItem {
-        margin: 2%;
-        padding: 3%;
-        border: 0.5px solid darkgrey;
-        border-radius: 1%;
-    }
-    
-    .padding .item-content {
-        padding: 16px !important;
-    }
+/*more than one*/
+
+
+/*чтобы не обрезало текст в меню*/
+
+.ng-binding {
+    /*white-space: normal;*/
+}
+
+.pizzaImg {
+    width: 100%;
+}
+
+.formInput::-webkit-input-placeholder {
+    font-size: 14pt;
+}
+
+.formError::-webkit-input-placeholder {
+    color: #c0392b;
+}
+
+.padding .item-content {
+    padding: 16px !important;
+}
+
+.platform-android .action-sheet .button {
+    text-align: center;
+    font-size: 17px;
+    color: dimgray;
+    font-weight: bold;
+}
+
+.action-sheet-title {
+    text-align: center !important;
+    font-size: 20px !important;
+    font-weight: normal !important;
+    background-color: crimson;
+    color: white !important;
+}
+
+.addToCartButton,
+.addToCartButton:enabled {
+    background-color: #dc143c;
+    color: #fff;
+    font-family: "-apple-system", "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 16px;
+}
+
+.addToCartButton:active {
+    background-color: #dc002c;
+}
+
+
+/*pizzas.html (menu)*/
+
+.ingredients {
+    font-size: 14pt;
+}
+
+.ingredientsTitle {
+    font-size: 14pt;
+}
+
+.pizzasButtonBar {
+    margin-top: 15px;
+}
+
+
+/*pizza.html*/
+
+.pizzaBlock {
+    margin: 10px 0 10px;
+}
+
+.pizzaPricesList {
+    font-size: 14pt;
+}
+
+.pizzaTitle {
+    font-style: italic;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.pizzaIngredientsText {
+    font-size: 14pt;
+}
+
+.pizzaItem {
+    margin: 2%;
+    padding: 3%;
+    border: 0.5px solid darkgrey;
+    border-radius: 1%;
+    height: 77%;
+}
+
+.pizzaFooter {
+    height: 14%;
+}
+
+.pizzaButton {
+    font-size: 13pt !important;
+}
+
+
+/*create-pizza.html*/
+
+.pizzaCreatorItem {
+    margin: 2%;
+    padding: 3%;
+    border: 0.5px solid dimgray;
+    border-radius: 1%;
+    height: 77%;
+}
+
+.pizzaCreatorFooter {
+    height: 14%;
+}
+
+.pizzaCreatorDeleteButton {
+    height: 10px !important;
+}
+
+.pizzaCreatorListItem {
+    font-size: 14pt;
+}
+
+.pizzaCreatorButtonBar {
+    margin-bottom: 20px;
+}
+
+
+/*ingredients.html*/
+
+.ingredientsContent {
+    /*height: 100%;*/
+}
+
+.ingredientsFooter {
+    height: 15%;
+}
+
+.ingredientsFooter button {
+    font-size: 14pt !important;
+}
+
+.ingredientsIcon {
+    position: absolute;
+    right: 20px;
+}
+
+.ingredientsSlider {
+    height: 90%;
+}
+
+.box {
+    height: 88%;
+    margin: 2%;
+    padding: 3%;
+    border: 0.5px solid dimgray;
+    border-radius: 1%;
+}

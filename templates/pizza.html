@@ -18,9 +18,11 @@
                 <li>Большая - {{pizza.lgSizePrice}} р.</li>
             </ul>
         </div>
-
-        <div class="purchaseButton">
-            <button class="button button-block button-assertive" onclick="event.preventDefault()" ng-click="addPizzaToCart({{pizza.id}})">В корзину</button>
-        </div>
     </ion-content>
+
+    <ion-footer-bar class="pizzaFooter">
+        <button class="button button-block addToCartButton pizzaButton" ng-click="addPizzaToCart({{pizza.id}})">
+            В корзину
+        </button>
+    </ion-footer-bar>
 </ion-view>
