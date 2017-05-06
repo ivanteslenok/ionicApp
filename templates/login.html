@@ -10,16 +10,16 @@
             <div class="list">
                 <label class="item item-input">
                     <span class="input-label">Логин</span>
-                    <input type="text" class="formInput {{usernameplaceholderClass}}" placeholder="{{usernamePlaceholder}}" ng-model="loginData.username">
+                    <input type="text" class="formInput {{usernamePlaceholderClass}}" placeholder="{{usernamePlaceholder}}" ng-model="loginInputData.username">
                 </label>
 
                 <label class="item item-input">
                     <span class="input-label">Пароль</span>
-                    <input type="password" class="formInput {{passwordPlaceholderClass}}" placeholder="{{passwordPlaceholder}}" ng-model="loginData.password">
+                    <input type="password" class="formInput {{passwordPlaceholderClass}}" placeholder="{{passwordPlaceholder}}" ng-model="loginInputData.password">
                 </label>
 
                 <label class="item">
-                    <button class="button button-block button-positive" type="submit">Войти</button>
+                    <button class="button button-block button-balanced"  ng-disabled="loginBtnDisabled" type="submit">Войти</button>
                 </label>
 
                 <label class="item">

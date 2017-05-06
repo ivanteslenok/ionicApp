@@ -2,7 +2,7 @@
     <ion-content class="pizzaCreatorItem">
         <div class="button-bar pizzaCreatorButtonBar">
             <button class="button button-assertive" ng-click="showDelete = !showDelete">Убрать</button>
-            <button class="button button-balanced" ng-click="openIngredients()">Добавить</button>
+            <button class="button button-balanced" ng-disabled="addBtnDisabled" ng-click="openIngredients()">Добавить</button>
         </div>
 
         <ion-list show-delete="showDelete">
@@ -15,7 +15,7 @@
     </ion-content>
 
     <ion-footer-bar class="pizzaCreatorFooter">
-        <button class="button button-block addToCartButton pizzaButton" ng-click="addPizzaToCart({{pizza.id}})">
+        <button class="button button-block addToCartButton pizzaButton" ng-click="addPizzaToCart()">
             В корзину
         </button>
     </ion-footer-bar>

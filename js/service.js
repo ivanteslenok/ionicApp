@@ -1,34 +1,51 @@
-angular.module('starter.services', ['ionic'])
+(function() {
+    'use strict';
 
-.service('DataService', function($http, $q, $ionicPopup, $ionicActionSheet) {
-    var pizzas = [];
-    var ingredients = [];
-    var shoppingCart = [];
+    angular
+        .module('starter.services', ['ionic'])
+        .factory('DataService', DataService);
 
-    var postConfig = {
-        headers: {
-            'Content-Type': 'json'
-        }
-    };
+    function DataService($http, $q, $ionicPopup, $ionicActionSheet) {
+        var pizzas = [];
+        var ingredients = [];
+        var shoppingCart = [];
+        var isLoggedIn = false;
 
-    var showAlert = function(title) {
-        $ionicPopup.alert({
-            title: title
-        });
-    };
-
-    function getPizza(id) {
-        for (var i = 0; i < pizzas.length; i++) {
-            if (+pizzas[i].id === +id) {
-                return pizzas[i];
+        var postConfig = {
+            headers: {
+                'Content-Type': 'json'
             }
+        };
+
+        var service = {
+            showAlert: showAlert,
+            getIsLoggedIn: getIsLoggedIn,
+            loadData: loadData,
+            getAllPizzas: getAllPizzas,
+            getPizza: getPizza,
+            getCart: getCart,
+            loadIngredients: loadIngredients,
+            getIngredients: getIngredients,
+            login: login,
+            registration: registration,
+            addPizzaToCart: addPizzaToCart
+        };
+
+        return service;
+
+        // Functions
+
+        function showAlert(title) {
+            $ionicPopup.alert({
+                title: title
+            });
         }
 
-        return null;
-    }
+        function getIsLoggedIn() {
+            return isLoggedIn;
+        }
 
-    return {
-        loadData: function() {
+        function loadData() {
             var defered = $q.defer();
 
             $http.get('https://ivanteslenok.000webhostapp.com/index.php')
@@ -42,20 +59,34 @@ angular.module('starter.services', ['ionic'])
                 });
 
             return defered.promise;
-        },
+        }
 
-        getAllPizzas: function() {
+        function getAllPizzas() {
             return pizzas;
-        },
+        }
 
-        getPizza: getPizza,
+        function getPizza(id) {
+            for (var i = 0; i < pizzas.length; i++) {
+                if (+pizzas[i].id === +id) {
+                    return pizzas[i];
+                }
+            }
 
-        getCart: function() {
+            return null;
+        }
+
+        function getCart() {
             return shoppingCart;
-        },
+        }
 
-        loadIngredients: function() {
+        function loadIngredients() {
             var defered = $q.defer();
+
+            if (ingredients.length > 0) {
+                defered.resolve(ingredients);
+
+                return defered.promise;
+            }
 
             $http.get('https://ivanteslenok.000webhostapp.com/ingredients.php')
                 .success(function(data) {
@@ -68,30 +99,56 @@ angular.module('starter.services', ['ionic'])
                 });
 
             return defered.promise;
-        },
+        }
 
-        getIngredients: function() {
+        function getIngredients() {
             return ingredients;
-        },
+        }
 
-        registration: function(registrationData, closeMethod) {
-            $http.post('https://ivanteslenok.000webhostapp.com/registration.php', registrationData)
+        function login(loginData) {
+            var defered = $q.defer();
+
+            $http.post('https://ivanteslenok.000webhostapp.com/login.php', loginData)
                 .success(function(data, status) {
-                    showAlert(data);
+                    defered.resolve(data);
 
-                    // if (data.success) {
-                    //     showAlert('Регистрация прошла успешно');
-                    //     closeMethod();
-                    // } else {
-                    //     showAlert('Пользователь с таким логином уже существует');
-                    // }
+                    if (data.success) {
+                        //showAlert('Вход произведен успешно');
+                        isLoggedIn = true;
+                    } else if (data.username) {
+                        showAlert('Неверный пароль');
+                    } else {
+                        showAlert('Пользователя с таким логином не существует, зарегестрируйтесь');
+                    }
                 })
                 .error(function() {
                     showAlert('Ошибка сервера');
                 });
-        },
 
-        addPizzaToCart: function(pizzaId) {
+            return defered.promise;
+        }
+
+        function registration(registrationData) {
+            var defered = $q.defer();
+
+            $http.post('https://ivanteslenok.000webhostapp.com/registration.php', registrationData)
+                .success(function(data, status) {
+                    defered.resolve(data);
+
+                    if (data.success) {
+                        //showAlert('Регистрация прошла успешно');
+                    } else {
+                        showAlert('Пользователь с таким логином уже существует');
+                    }
+                })
+                .error(function() {
+                    showAlert('Ошибка сервера');
+                });
+
+            return defered.promise;
+        }
+
+        function addPizzaToCart(pizzaId) {
             var pizza = getPizza(pizzaId);
 
             var shoppingCartObj = {
@@ -125,7 +182,7 @@ angular.module('starter.services', ['ionic'])
                             break;
                     }
 
-                    testCart = shoppingCart.find(function(elem) {
+                    var testCart = shoppingCart.find(function(elem) {
                         return elem.pizzaId === pizzaId && elem.pizzaSize === shoppingCartObj.pizzaSize;
                     });
 
@@ -141,5 +198,5 @@ angular.module('starter.services', ['ionic'])
                 }
             });
         }
-    };
-});
+    }
+})();

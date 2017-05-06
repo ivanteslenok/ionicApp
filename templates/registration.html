@@ -2,75 +2,88 @@
     <ion-header-bar class="bar-positive">
         <h1 class="title">Регистрация</h1>
         <div class="buttons">
-            <button class="button button-clear button-icon ion-android-close" ng-click="closeRegistration()">Закрыть</button>
+            <button class="button button-clear button-icon ion-android-close" ng-click="closeRegistration(false)">Закрыть</button>
         </div>
     </ion-header-bar>
-    <ion-content>
-        <form ng-submit="doRegistration()">
+    <ion-content class="registrationContent">
+        <form>
             <div class="list">
                 <label class="item item-input">
                     <span class="input-label">Логин</span>
-                    <input type="text" class="formInput {{usernamePlaceholderClass}}" placeholder="{{usernamePlaceholder}}" ng-model="registrationData.username">
+                    <input type="text" class="formInput {{usernamePlaceholderClass}}" placeholder="{{usernamePlaceholder}}" ng-model="registrationInputData.username">
                 </label>
 
                 <label class="item item-input">
                     <span class="input-label">Пароль</span>
-                    <input type="password" class="formInput {{passwordPlaceholderClass}}" placeholder="{{passwordPlaceholder}}" ng-model="registrationData.password">
+                    <input type="password" class="formInput {{passwordPlaceholderClass}}" placeholder="{{passwordPlaceholder}}" ng-model="registrationInputData.password">
                 </label>
 
                 <label class="item item-input">
                     <span class="input-label">Подтверждение</span>
-                    <input type="password" class="formInput {{confirmPasswordPlaceholderClass}}" placeholder="{{confirmPasswordPlaceholder}}" ng-model="registrationData.confirmPassword">
+                    <input type="password" class="formInput {{confirmPasswordPlaceholderClass}}" placeholder="{{confirmPasswordPlaceholder}}" ng-model="registrationInputData.confirmPassword">
                 </label>
 
-                <label class="item item-input">
-                    <span class="input-label">Имя</span>
-                    <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="registrationData.firstname">
-                </label>
+                <button class="button button-block button-calm" ng-show="!additionalData" ng-click="showAdditional()">
+                    Ввести дополнительную информацию
+                </button>
 
-                <label class="item item-input">
-                    <span class="input-label">Фамилия</span>
-                    <input type="text" class="formInput {{lastnamePlaceholderClass}}" placeholder="{{lastnamePlaceholder}}" ng-model="registrationData.lastname">
-                </label>
+                <div class="list" ng-show="additionalData">
+                    <label class="item item-input">
+                        <span class="input-label">Имя</span>
+                        <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="registrationInputData.firstname">
+                    </label>
 
-                <label class="item item-input">
-                    <span class="input-label">Телефон</span>
-                    <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="registrationData.phone">
-                </label>
+                    <label class="item item-input">
+                        <span class="input-label">Фамилия</span>
+                        <input type="text" class="formInput {{lastnamePlaceholderClass}}" placeholder="{{lastnamePlaceholder}}" ng-model="registrationInputData.lastname">
+                    </label>
 
-                <label class="item item-input">
-                    <span class="input-label">Улица</span>
-                    <input type="text" class="formInput {{streetPlaceholderClass}}" placeholder="{{streetPlaceholder}}" ng-model="registrationData.street">
-                </label>
+                    <label class="item item-input">
+                        <span class="input-label">Телефон</span>
+                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="registrationInputData.phone">
+                    </label>
 
-                <label class="item item-input">
-                    <span class="input-label">Дом</span>
-                    <input type="text" class="formInput {{housePlaceholderClass}}" placeholder="{{housePlaceholder}}" ng-model="registrationData.house">
-                </label>
+                    <label class="item item-input">
+                        <span class="input-label">Улица</span>
+                        <input type="text" class="formInput {{streetPlaceholderClass}}" placeholder="{{streetPlaceholder}}" ng-model="registrationInputData.street">
+                    </label>
 
-                <label class="item item-input">
-                    <span class="input-label">Квартира</span>
-                    <input type="text" class="formInput {{roomPlaceholderClass}}" placeholder="{{roomPlaceholder}}" ng-model="registrationData.room">
-                </label>
+                    <label class="item item-input">
+                        <span class="input-label">Дом</span>
+                        <input type="text" class="formInput {{housePlaceholderClass}}" placeholder="{{housePlaceholder}}" ng-model="registrationInputData.house">
+                    </label>
 
-                <label class="item item-input">
-                    <span class="input-label">Подъезд</span>
-                    <input type="text" class="formInput {{entrancePlaceholderClass}}" placeholder="{{entrancePlaceholder}}" ng-model="registrationData.entrance">
-                </label>
+                    <label class="item item-input">
+                        <span class="input-label">Квартира</span>
+                        <input type="text" class="formInput {{roomPlaceholderClass}}" placeholder="{{roomPlaceholder}}" ng-model="registrationInputData.room">
+                    </label>
 
-                <label class="item item-input">
-                    <span class="input-label">Этаж</span>
-                    <input type="text" class="formInput {{floorPlaceholderClass}}" placeholder="{{floorPlaceholder}}" ng-model="registrationData.floor">
-                </label>
+                    <label class="item item-input">
+                        <span class="input-label">Подъезд</span>
+                        <input type="text" class="formInput {{entrancePlaceholderClass}}" placeholder="{{entrancePlaceholder}}" ng-model="registrationInputData.entrance">
+                    </label>
 
-                <label class="item">
-                    <button class="button button-block button-positive" type="submit">Регистрация</button>
-                </label>
+                    <label class="item item-input">
+                        <span class="input-label">Этаж</span>
+                        <input type="text" class="formInput {{floorPlaceholderClass}}" placeholder="{{floorPlaceholder}}" ng-model="registrationInputData.floor">
+                    </label>
+                </div>
 
-                <label class="item">
-                    <button class="button button-block button-assertive" type="reset" ng-click="closeRegistration()">Отмена</button>
-                </label>
+                <button class="button button-block button-calm" ng-show="additionalData" ng-click="showAdditional()">
+                    Не вводить дополнительную информацию
+                </button>
             </div>
         </form>
     </ion-content>
+
+    <ion-footer-bar class="registrationFooter">
+        <div class="button-bar">
+            <button class="button button-balanced" ng-disabled="registerBtnDisabled" ng-click="doRegistration()">
+                Регистрация
+            </button>
+            <button class="button button-assertive" ng-click="closeRegistration(true)">
+                Отмена
+            </button>
+        </div>
+    </ion-footer-bar>
 </ion-modal-view>

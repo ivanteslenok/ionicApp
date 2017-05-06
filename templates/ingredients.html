@@ -37,9 +37,18 @@
     </ion-content>
 
     <ion-footer-bar class="ingredientsFooter">
-        <button class="button button-block button-balanced" ng-click="nextSlide()">
-            Далее
-            <i class="icon ion-chevron-right ingredientsIcon"></i>
-        </button>
+        <div class="button-bar">
+            <button class="button button-block button-calm" ng-click="previousSlide()">
+                <!--<i class="icon ion-chevron-left ingredientsIconLeft"></i>-->
+                Назад
+            </button>
+            <button class="button button-block button-royal" ng-click="createList()">
+                Готово
+            </button>
+            <button class="button button-block button-calm" ng-click="nextSlide()">
+                Далее
+                <!--<i class="icon ion-chevron-right ingredientsIconRight"></i>-->
+            </button>
+        </div>
     </ion-footer-bar>
 </ion-modal-view>

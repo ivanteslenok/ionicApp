@@ -50,6 +50,29 @@
     background-color: #dc002c;
 }
 
+.input-label {
+    min-width: 140px;
+}
+
+
+/*registration.html*/
+
+.registrationContent {
+    margin: 2%;
+    padding: 3%;
+    border: 0.5px solid darkgrey;
+    border-radius: 1%;
+    height: 80%;
+}
+
+.registrationFooter {
+    height: 11%;
+}
+
+.registrationFooter button {
+    font-size: 14pt !important;
+}
+
 
 /*pizzas.html (menu)*/
 
@@ -133,30 +156,29 @@
 /*ingredients.html*/
 
 .ingredientsContent {
-    /*height: 100%;*/
+    height: 77%;
 }
 
 .ingredientsFooter {
-    height: 15%;
+    height: 14%;
 }
 
 .ingredientsFooter button {
     font-size: 14pt !important;
 }
 
-.ingredientsIcon {
-    position: absolute;
-    right: 20px;
-}
-
-.ingredientsSlider {
-    height: 90%;
-}
-
 .box {
-    height: 88%;
+    height: 90%;
     margin: 2%;
     padding: 3%;
     border: 0.5px solid dimgray;
     border-radius: 1%;
 }
+
+.ingredientsSlider {
+    height: 100% !important;
+}
+
+.ingredientsIconLeft {}
+
+.ingredientsIconRight {}
