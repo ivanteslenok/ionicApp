@@ -28,7 +28,8 @@
             getIngredients: getIngredients,
             login: login,
             registration: registration,
-            addPizzaToCart: addPizzaToCart
+            addPizzaToCart: addPizzaToCart,
+            addCustomPizzaToCart: addCustomPizzaToCart
         };
 
         return service;
@@ -79,7 +80,7 @@
             return shoppingCart;
         }
 
-        function loadIngredients() {
+        function loadIngredients(hideLoading) {
             var defered = $q.defer();
 
             if (ingredients.length > 0) {
@@ -95,6 +96,7 @@
                     defered.resolve(data);
                 })
                 .error(function() {
+                    hideLoading();
                     showAlert('Ошибка сервера');
                 });
 
@@ -155,7 +157,10 @@
                 pizzaId: pizzaId,
                 pizzaName: pizza.name,
                 pizzaCount: 1,
-                pizzaSize: ''
+                pizzaSize: '',
+                ingredients: pizza.ingredients,
+                pizzaPrice: 0,
+                isCustom: false
             };
 
             $ionicActionSheet.show({
@@ -172,25 +177,112 @@
                 buttonClicked: function(index) {
                     switch (index) {
                         case 0:
-                            shoppingCartObj.pizzaSize = 'sm';
+                            shoppingCartObj.pizzaSize = 'Маленькая';
+                            shoppingCartObj.pizzaPrice = pizza.smSizePrice;
                             break;
                         case 1:
-                            shoppingCartObj.pizzaSize = 'md';
+                            shoppingCartObj.pizzaSize = 'Средняя';
+                            shoppingCartObj.pizzaPrice = pizza.mdSizePrice;
                             break;
                         case 2:
-                            shoppingCartObj.pizzaSize = 'lg';
+                            shoppingCartObj.pizzaSize = 'Большая';
+                            shoppingCartObj.pizzaPrice = pizza.lgSizePrice;
                             break;
                     }
 
-                    var testCart = shoppingCart.find(function(elem) {
-                        return elem.pizzaId === pizzaId && elem.pizzaSize === shoppingCartObj.pizzaSize;
-                    });
+                    // var testCart = shoppingCart.find(function(elem) {
+                    //     return elem.pizzaId === pizzaId && elem.pizzaSize === shoppingCartObj.pizzaSize;
+                    // });
+
+                    var testCart;
+
+                    for (var i = 0; i < shoppingCart.length; i++) {
+                        if (shoppingCart[i].pizzaId === shoppingCartObj.pizzaId && shoppingCart[i].pizzaSize === shoppingCartObj.pizzaSize) {
+                            testCart = shoppingCart[i];
+                        }
+                    }
 
                     if (!testCart) {
                         shoppingCart.push(shoppingCartObj);
                     } else {
                         testCart.pizzaCount++;
                     }
+
+                    showAlert('Пицца "' + shoppingCartObj.pizzaName + ' ' + shoppingCartObj.pizzaSize + '" добавлена в корзину');
+
+                    console.log(shoppingCart);
+
+                    return true;
+                }
+            });
+        }
+
+        function addCustomPizzaToCart(ingredients, totalPrice) {
+            var customId = '';
+            var ingredientsNames = [];
+
+            ingredients.forEach(function(elem) {
+                customId += elem.id;
+                ingredientsNames.push(elem.name);
+            });
+
+
+            var shoppingCartObj = {
+                pizzaId: +customId,
+                pizzaName: 'custom pizza (' + customId + ')',
+                pizzaCount: 1,
+                pizzaSize: '',
+                ingredients: ingredientsNames.join(', '),
+                pizzaPrice: 0,
+                isCustom: true
+            };
+
+            $ionicActionSheet.show({
+                titleText: 'Выберите размер',
+
+                buttons: [
+                    { text: 'Маленькая - ' + (totalPrice * 0.8).toFixed(2) + 'р.' },
+                    { text: 'Средняя - ' + totalPrice + 'р.' },
+                    { text: 'Большая - ' + (totalPrice * 1.2).toFixed(2) + 'р.' }
+                ],
+
+                cancelText: 'Отмена',
+
+                buttonClicked: function(index) {
+                    switch (index) {
+                        case 0:
+                            shoppingCartObj.pizzaSize = 'Маленькая';
+                            shoppingCartObj.pizzaPrice = (totalPrice * 0.8).toFixed(2);
+                            break;
+                        case 1:
+                            shoppingCartObj.pizzaSize = 'Средняя';
+                            shoppingCartObj.pizzaPrice = totalPrice;
+                            break;
+                        case 2:
+                            shoppingCartObj.pizzaSize = 'Большая';
+                            shoppingCartObj.pizzaPrice = (totalPrice * 1.2).toFixed(2);
+                            break;
+                    }
+
+                    // var testCart = shoppingCart.find(function(elem) {
+                    //     return elem.pizzaId === +customId && elem.pizzaSize === shoppingCartObj.pizzaSize;
+                    // });
+
+                    var testCart;
+
+                    for (var i = 0; i < shoppingCart.length; i++) {
+                        if (shoppingCart[i].pizzaId === shoppingCartObj.pizzaId && shoppingCart[i].pizzaSize === shoppingCartObj.pizzaSize) {
+                            testCart = shoppingCart[i];
+                        }
+                    }
+
+                    if (!testCart) {
+                        shoppingCart.push(shoppingCartObj);
+                    } else {
+                        testCart.pizzaCount++;
+                    }
+
+                    showAlert('Пицца добавлена в корзину');
 
                     console.log(shoppingCart);
 

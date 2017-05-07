@@ -1,13 +1,17 @@
 <ion-view view-title="Создание пиццы">
     <ion-content class="pizzaCreatorItem">
+        <div class="item pizzaCreatorTitle">
+            <p>Стоимость (средний размер): {{totalPrice}} р.</p>
+        </div>
+
         <div class="button-bar pizzaCreatorButtonBar">
             <button class="button button-assertive" ng-click="showDelete = !showDelete">Убрать</button>
-            <button class="button button-balanced" ng-disabled="addBtnDisabled" ng-click="openIngredients()">Добавить</button>
+            <button class="button button-balanced" ng-disabled="addBtnDisabled" ng-click="openIngredients(); showDelete = false">Добавить</button>
         </div>
 
         <ion-list show-delete="showDelete">
-            <ion-item ng-repeat="item in items" class="item-icon-left item-button-right item-toggle item-icon-right">
-                <ion-delete-button class="ion-minus-circled" ng-click="deleteItem(item)"></ion-delete-button>
+            <ion-item ng-repeat="item in items" class="item-icon-left">
+                <ion-delete-button class="ion-close-circled" ng-click="deleteItem(item)"></ion-delete-button>
                 <i class="icon ion-pizza"></i>
                 <h2>{{item.type}}: {{item.name}}</h2>
             </ion-item>
@@ -15,7 +19,7 @@
     </ion-content>
 
     <ion-footer-bar class="pizzaCreatorFooter">
-        <button class="button button-block addToCartButton pizzaButton" ng-click="addPizzaToCart()">
+        <button class="button button-block addToCartButton pizzaButton" ng-disabled="addToCartBtnDisabled" ng-click="addToCart()">
             В корзину
         </button>
     </ion-footer-bar>

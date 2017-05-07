@@ -5,7 +5,34 @@
             <button class="button button-clear button-icon ion-android-close" ng-click="closeShoppingCart()">Закрыть</button>
         </div>
     </ion-header-bar>
-    <ion-content>
 
+    <ion-footer-bar class="bar-subheader">
+        <div class="title cartTitle">
+            <p>Итого: {{cartTotalPrice}} р.</p>
+        </div>
+    </ion-footer-bar>
+
+    <ion-content class="has-subheader cartContent">
+        <div class="item cartItem" ng-repeat="item in cartItems">
+            <div class="cartDelBtnBlock">
+                <button class="button button-assertive ion-close-circled" ng-click="deleteItem(item)"></button>
+            </div>
+            <div class="cartInfoBlock">
+                <h3>{{item.pizzaName}}</h3>
+                <h3>{{item.pizzaSize}}</h3>
+                <h3>Количество: {{item.pizzaCount}}</h3>
+                <h3>{{item.ingredients}}</h3>
+            </div>
+            <div class="cartCountBlock">
+                <button class="button button-calm icon ion-plus-circled cartCountControl" ng-click="pizzaCountMore(item)"></button>
+                <button class="button button-calm icon ion-minus-circled cartCountControl" onclick="event.preventDefault()" ng-click="pizzaCountLess(item)"></button>
+            </div>
+        </div>
     </ion-content>
+
+    <ion-footer-bar class="cartFooter">
+        <button class="button button-block button-balanced" ng-click="checkout()">
+            Оформить заказ
+        </button>
+    </ion-footer-bar>
 </ion-modal-view>

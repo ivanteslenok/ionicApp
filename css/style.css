@@ -12,7 +12,7 @@
 }
 
 .formInput::-webkit-input-placeholder {
-    font-size: 14pt;
+    /*font-size: 12pt;*/
 }
 
 .formError::-webkit-input-placeholder {
@@ -128,6 +128,12 @@
 
 /*create-pizza.html*/
 
+.pizzaCreatorTitle p {
+    text-align: center;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
 .pizzaCreatorItem {
     margin: 2%;
     padding: 3%;
@@ -159,6 +165,10 @@
     height: 77%;
 }
 
+.scroll {
+    height: 100%;
+}
+
 .ingredientsFooter {
     height: 14%;
 }
@@ -182,3 +192,87 @@
 .ingredientsIconLeft {}
 
 .ingredientsIconRight {}
+
+
+/*shopping-cart.html*/
+
+.cartTitle p {
+    text-align: center;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.cartContent {
+    margin: 2%;
+    padding: 3%;
+    border: 0.5px solid dimgray;
+    border-radius: 1%;
+    height: 70%;
+}
+
+.cartItem {
+    display: flex;
+    align-items: center;
+}
+
+.cartDelBtnBlock {
+    margin-right: auto;
+}
+
+.cartDelBtnBlock button {
+    font-size: 25px;
+}
+
+.cartInfoBlock {
+    align-self: flex-start;
+    overflow-x: hidden;
+    margin: 5%;
+}
+
+.cartCountText {
+    font-size: 12pt !important;
+    font-weight: bold;
+    padding-left: 7%;
+    padding-right: 7%;
+}
+
+.cartCountBlock {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.cartCountBlock button {
+    font-size: 25px !important;
+}
+
+.cartCountBlock :first-child {
+    margin-bottom: 10%;
+}
+
+.cartFooter {
+    height: 14%;
+}
+
+.cartFooter button {
+    font-size: 14pt !important;
+}
+
+
+/*order.html*/
+
+.orderContent {
+    margin: 2%;
+    padding: 3%;
+    border: 0.5px solid darkgrey;
+    border-radius: 1%;
+    height: 80%;
+}
+
+.orderFooter {
+    height: 11%;
+}
+
+.orderFooter button {
+    font-size: 14pt !important;
+}

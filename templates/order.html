@@ -1,33 +1,16 @@
 <ion-modal-view>
     <ion-header-bar class="bar-positive">
-        <h1 class="title">Регистрация</h1>
-        <div class="buttons">
-            <button class="button button-clear button-icon ion-android-close" ng-click="closeRegistration(false)">Закрыть</button>
-        </div>
+        <h1 class="title">Оформление заказа</h1>
     </ion-header-bar>
-    <ion-content class="registrationContent">
-        <form>
-            <div class="list">
-                <label class="item item-input">
-                    <span class="input-label">Логин</span>
-                    <input type="text" class="formInput {{usernamePlaceholderClass}}" placeholder="{{usernamePlaceholder}}" ng-model="registrationInputData.username">
-                </label>
+    <ion-content class="orderContent">
+        <div class="button-bar">
+            <button class="button button-calm">Доставка</button>
+            <button class="button button-calm button-outline">Самовывоз</button>
+        </div>
 
-                <label class="item item-input">
-                    <span class="input-label">Пароль</span>
-                    <input type="password" class="formInput {{passwordPlaceholderClass}}" placeholder="{{passwordPlaceholder}}" ng-model="registrationInputData.password">
-                </label>
-
-                <label class="item item-input">
-                    <span class="input-label">Подтверждение</span>
-                    <input type="password" class="formInput {{confirmPasswordPlaceholderClass}}" placeholder="{{confirmPasswordPlaceholder}}" ng-model="registrationInputData.confirmPassword">
-                </label>
-
-                <button class="button button-block button-calm" ng-show="!additionalData" ng-click="showAdditional()">
-                    Ввести дополнительную информацию
-                </button>
-
-                <div class="list" ng-show="additionalData">
+        <div class="delivery" ng-if="true">
+            <form>
+                <div class="list">
                     <label class="item item-input">
                         <span class="input-label">Имя</span>
                         <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="registrationInputData.firstname">
@@ -68,21 +51,38 @@
                         <input type="text" class="formInput {{floorPlaceholderClass}}" placeholder="{{floorPlaceholder}}" ng-model="registrationInputData.floor">
                     </label>
                 </div>
+            </form>
+        </div>
 
-                <button class="button button-block button-calm" ng-show="additionalData" ng-click="showAdditional()">
-                    Не вводить дополнительную информацию
-                </button>
-            </div>
-        </form>
+        <div class="Pickup" ng-if="false">
+            <form>
+                <div class="list">
+                    <label class="item item-input">
+                        <span class="input-label">Имя</span>
+                        <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="registrationInputData.firstname">
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label">Фамилия</span>
+                        <input type="text" class="formInput {{lastnamePlaceholderClass}}" placeholder="{{lastnamePlaceholder}}" ng-model="registrationInputData.lastname">
+                    </label>
+
+                    <label class="item item-input">
+                        <span class="input-label">Телефон</span>
+                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="registrationInputData.phone">
+                    </label>
+                </div>
+            </form>
+        </div>
     </ion-content>
 
-    <ion-footer-bar class="registrationFooter">
+    <ion-footer-bar class="orderFooter">
         <div class="button-bar">
-            <button class="button button-assertive" ng-click="closeRegistration(true)">
+            <button class="button button-assertive" ng-click="closeOrder()">
                 Отмена
             </button>
-            <button class="button button-balanced" ng-disabled="registerBtnDisabled" ng-click="doRegistration()">
-                Регистрация
+            <button class="button button-balanced" ng-disabled="registerBtnDisabled" ng-click="doPurchase()">
+                Заказать
             </button>
         </div>
     </ion-footer-bar>

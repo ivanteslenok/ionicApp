@@ -15,6 +15,10 @@
 
         $scope.addBtnDisabled = false;
 
+        $scope.addToCartBtnDisabled = true;
+
+        $scope.totalPrice = 0;
+
         var ingredients = [];
 
         // Открытие модального окна ингредиентов
@@ -22,7 +26,7 @@
             $scope.addBtnDisabled = true;
             showLoading();
 
-            DataService.loadIngredients().then(
+            DataService.loadIngredients(hideLoading).then(
                 function(value) {
                     ingredients = value;
 
@@ -48,8 +52,6 @@
 
                     $scope.modalIngredients.show();
                     hideLoading();
-
-                    $scope.addBtnDisabled = false;
                 },
                 function(reason) {
                     DataService.showAlert('Эта ошибка никогда не произойдет');
@@ -57,10 +59,21 @@
             );
         };
 
-        //$scope.addPizzaToCart = DataService.addPizzaToCart;
+        $scope.addToCart = function() {
+            DataService.addCustomPizzaToCart($scope.items, $scope.totalPrice);
+        };
 
         $scope.deleteItem = function(item) {
             $scope.items.splice($scope.items.indexOf(item), 1);
+
+            $scope.totalPrice -= +item.price;
+            $scope.totalPrice = $scope.totalPrice.toFixed(2);
+
+            item.added = false;
+
+            if ($scope.items.length <= 0) {
+                $scope.addToCartBtnDisabled = true;
+            }
 
             console.log($scope.items);
         };
@@ -75,6 +88,20 @@
             $scope.items = ingredients.filter(function(elem) {
                 return elem.added;
             });
+
+            $scope.totalPrice = 0;
+
+            $scope.items.forEach(function(elem) {
+                $scope.totalPrice += +elem.price;
+            });
+
+            $scope.totalPrice = $scope.totalPrice.toFixed(2);
+
+            if ($scope.items.length <= 0) {
+                $scope.addToCartBtnDisabled = true;
+            } else {
+                $scope.addToCartBtnDisabled = false;
+            }
 
             console.log($scope.items);
 
@@ -96,6 +123,7 @@
         }
 
         function hideLoading() {
+            $scope.addBtnDisabled = false;
             $ionicLoading.hide();
         }
     }

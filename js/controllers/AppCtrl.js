@@ -13,7 +13,7 @@
         //$scope.$on('$ionicView.enter', function(e) {
         //});
 
-        // Data
+        // Вход ///////////////////////////////////////////////////////////////////////////////////////////////
 
         // Информация для входа
         var loginData = {
@@ -25,6 +25,26 @@
             username: null,
             password: null
         };
+
+        $scope.loginBtnDisabled = false;
+
+        // Создание окна входа
+        $ionicModal.fromTemplateUrl('templates/login.html', {
+            scope: $scope
+        }).then(function(modal) {
+            $scope.modalLogin = modal;
+        });
+
+        // Открытие модального окна входа
+        $scope.login = login;
+
+        // Закрытие модального окна входа
+        $scope.closeLogin = closeLogin;
+
+        // Войти
+        $scope.doLogin = doLogin;
+
+        // Регистрация /////////////////////////////////////////////////////////////////////////////////////
 
         // Информация для регистрации
         var registrationData = {
@@ -54,38 +74,9 @@
             floor: ''
         };
 
-        // Информация для заказа
-        var orderData = {
-            firstname: null,
-            lastname: null,
-            phone: null,
-            street: null,
-            house: null,
-            entrance: null,
-            room: null,
-            floor: null
-        };
-
-        $scope.loginBtnDisabled = false;
         $scope.registerBtnDisabled = false;
 
         $scope.additionalData = false;
-
-        // Создание окна входа
-        $ionicModal.fromTemplateUrl('templates/login.html', {
-            scope: $scope
-        }).then(function(modal) {
-            $scope.modalLogin = modal;
-        });
-
-        // Открытие модального окна входа
-        $scope.login = login;
-
-        // Закрытие модального окна входа
-        $scope.closeLogin = closeLogin;
-
-        // Вход
-        $scope.doLogin = doLogin;
 
         // Создание окна регистрации
         $ionicModal.fromTemplateUrl('templates/registration.html', {
@@ -102,8 +93,10 @@
         // Закрытие модального окна регистрации
         $scope.closeRegistration = closeRegistration;
 
-        // Регистрация
+        // Зарегестрироваться
         $scope.doRegistration = doRegistration;
+
+        // Корзина /////////////////////////////////////////////////////////////////////////////////////     
 
         // Модальное окно для "Корзины"
         $ionicModal.fromTemplateUrl('templates/shopping-cart.html', {
@@ -112,8 +105,14 @@
             $scope.modalShoppingCart = modal;
         });
 
+        var totalPrice = 0;
+
         // Открыть "Корзину"
         $scope.shoppingCart = function() {
+            $scope.cartItems = DataService.getCart();
+
+            calcTotalPrice();
+
             $scope.modalShoppingCart.show();
         };
 
@@ -122,10 +121,84 @@
             $scope.modalShoppingCart.hide();
         };
 
+        $scope.deleteItem = deleteItem;
+        $scope.pizzaCountLess = pizzaCountLess;
+        $scope.pizzaCountMore = pizzaCountMore;
+
+        function calcTotalPrice() {
+            totalPrice = 0;
+
+            $scope.cartItems.forEach(function(elem) {
+                totalPrice += +elem.pizzaPrice * +elem.pizzaCount;
+            });
+
+            if (totalPrice < 0) {
+                totalPrice = 0;
+            }
+
+            $scope.cartTotalPrice = totalPrice.toFixed(2);
+        }
+
+        function pizzaCountLess(item) {
+            $scope.cartItems[$scope.cartItems.indexOf(item)].pizzaCount--;
+
+            if (item.pizzaCount <= 0) {
+                deleteItem(item);
+            }
+
+            calcTotalPrice();
+        }
+
+        function pizzaCountMore(item) {
+            $scope.cartItems[$scope.cartItems.indexOf(item)].pizzaCount++;
+
+            if (item.pizzaCount > 10) {
+                item.pizzaCount = 10;
+                DataService.showAlert('Не более 10 одинаковых пицц!');
+            }
+
+            calcTotalPrice();
+        }
+
+        function deleteItem(item) {
+            $scope.cartItems.splice($scope.cartItems.indexOf(item), 1);
+
+            calcTotalPrice();
+        }
+
+        // Оформить заказ
+        $scope.checkout = function() {
+            order();
+        };
+
+        // Заказ ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Создание окна регистрации
+        $ionicModal.fromTemplateUrl('templates/order.html', {
+            scope: $scope
+        }).then(function(modal) {
+            $scope.modalOrder = modal;
+        });
+
+        // Закрытие модального окна регистрации
+        $scope.closeOrder = closeOrder;
+
+        // Информация для заказа
+        var orderData = {
+            firstname: null,
+            lastname: null,
+            phone: null,
+            street: null,
+            house: null,
+            entrance: null,
+            room: null,
+            floor: null
+        };
+
         // Сделать покупку
         $scope.doPurchase = function() {};
 
-        // Functions
+        // Functions ///////////////////////////////////////////////////////////////////////////////////////
 
         function login() {
             defaultLoginPlaceholders();
@@ -156,6 +229,7 @@
             DataService.login(loginData).then(
                 function(value) {
                     if (value.success) {
+                        alert('вошел');
                         closeLogin();
                     } else {
                         $scope.loginBtnDisabled = false;
@@ -236,6 +310,15 @@
                     DataService.showAlert('Эта ошибка никогда не произойдет');
                 }
             );
+        }
+
+        // Открытие модального окна регистрации
+        function order() {
+            $scope.modalOrder.show();
+        }
+
+        function closeOrder(action) {
+            $scope.modalOrder.hide();
         }
 
         function defaultLoginPlaceholders() {
