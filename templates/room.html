@@ -1,0 +1,108 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-positive">
+        <h1 class="title">Личный кабинет</h1>
+        <div class="buttons">
+            <button class="button button-clear button-icon ion-android-close" ng-click="closeRoom()">Закрыть</button>
+        </div>
+    </ion-header-bar>
+    <ion-content class="roomContent">
+        <h3 class="title">Пользователь: {{userInfo.username}}</h3>
+
+        <ion-list ng-if="!isEdit">
+            <ion-item class="item-divider">
+                {{userInfo.firstname}} {{userInfo.lastname}}
+            </ion-item>
+            <ion-item>
+                Телефон: {{userInfo.phone}}
+            </ion-item>
+            <ion-item>
+                <ion-list>
+                    <ion-item class="item-divider">
+                        Адрес
+                    </ion-item>
+                    <ion-item>
+                        <b>Улица:</b> {{userInfo.street}}
+                    </ion-item>
+                    <ion-item>
+                        <b>Дом:</b> {{userInfo.house}}
+                    </ion-item>
+                    <ion-item>
+                        <b>№ квартиры:</b> {{userInfo.room}}
+                    </ion-item>
+                    <ion-item>
+                        <b>Этаж:</b> {{userInfo.floor}}
+                    </ion-item>
+                    <ion-item>
+                        <b>Подъезд:</b> {{userInfo.entrance}}
+                    </ion-item>
+                </ion-list>
+            </ion-item>
+        </ion-list>
+
+        <div ng-if="isEdit">
+            <form>
+                <div class="list">
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Имя</span>
+                        <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="editUserInfo.firstname">
+                    </label>
+
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Фамилия</span>
+                        <input type="text" class="formInput {{lastnamePlaceholderClass}}" placeholder="{{lastnamePlaceholder}}" ng-model="editUserInfo.lastname">
+                    </label>
+
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Телефон</span>
+                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="editUserInfo.phone">
+                    </label>
+
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Улица</span>
+                        <input type="text" class="formInput {{streetPlaceholderClass}}" placeholder="{{streetPlaceholder}}" ng-model="editUserInfo.street">
+                    </label>
+
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Дом</span>
+                        <input type="text" class="formInput {{housePlaceholderClass}}" placeholder="{{housePlaceholder}}" ng-model="editUserInfo.house">
+                    </label>
+
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Квартира</span>
+                        <input type="text" class="formInput {{roomPlaceholderClass}}" placeholder="{{roomPlaceholder}}" ng-model="editUserInfo.room">
+                    </label>
+
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Подъезд</span>
+                        <input type="text" class="formInput {{entrancePlaceholderClass}}" placeholder="{{entrancePlaceholder}}" ng-model="editUserInfo.entrance">
+                    </label>
+
+                    <label class="item item-input item-stacked-label">
+                        <span class="input-label">Этаж</span>
+                        <input type="text" class="formInput {{floorPlaceholderClass}}" placeholder="{{floorPlaceholder}}" ng-model="editUserInfo.floor">
+                    </label>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+
+    <ion-footer-bar class="roomFooter">
+        <div class="button-bar" ng-if="!isEdit">
+            <button class="button button-assertive" ng-click="escapeRoom()">
+                Выйти
+            </button>
+            <button class="button button-balanced" ng-click="editRoom(userInfo)">
+                Редактировать
+            </button>
+        </div>
+
+        <div class="button-bar" ng-if="isEdit">
+            <button class="button button-assertive" ng-click="cancelEdit()">
+                Отмена
+            </button>
+            <button class="button button-balanced" ng-disabled="applyChangesBtnDisabled" ng-click="applyChanges(userInfo.username, editUserInfo)">
+                Готово
+            </button>
+        </div>
+    </ion-footer-bar>
+</ion-modal-view>

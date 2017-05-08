@@ -2,53 +2,56 @@
     <ion-header-bar class="bar-positive">
         <h1 class="title">Оформление заказа</h1>
     </ion-header-bar>
-    <ion-content class="orderContent">
+
+    <ion-header-bar class="bar-subheader orderSubHeader">
         <div class="button-bar">
             <button class="button button-calm">Доставка</button>
             <button class="button button-calm button-outline">Самовывоз</button>
         </div>
+    </ion-header-bar>
 
+    <ion-content class="orderContent">
         <div class="delivery" ng-if="true">
             <form>
                 <div class="list">
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Имя</span>
-                        <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="registrationInputData.firstname">
+                        <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="deliveryData.firstname">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Фамилия</span>
-                        <input type="text" class="formInput {{lastnamePlaceholderClass}}" placeholder="{{lastnamePlaceholder}}" ng-model="registrationInputData.lastname">
+                        <input type="text" class="formInput {{lastnamePlaceholderClass}}" placeholder="{{lastnamePlaceholder}}" ng-model="deliveryData.lastname">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Телефон</span>
-                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="registrationInputData.phone">
+                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="deliveryData.phone">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Улица</span>
-                        <input type="text" class="formInput {{streetPlaceholderClass}}" placeholder="{{streetPlaceholder}}" ng-model="registrationInputData.street">
+                        <input type="text" class="formInput {{streetPlaceholderClass}}" placeholder="{{streetPlaceholder}}" ng-model="deliveryData.street">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Дом</span>
-                        <input type="text" class="formInput {{housePlaceholderClass}}" placeholder="{{housePlaceholder}}" ng-model="registrationInputData.house">
+                        <input type="text" class="formInput {{housePlaceholderClass}}" placeholder="{{housePlaceholder}}" ng-model="deliveryData.house">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Квартира</span>
-                        <input type="text" class="formInput {{roomPlaceholderClass}}" placeholder="{{roomPlaceholder}}" ng-model="registrationInputData.room">
+                        <input type="text" class="formInput {{roomPlaceholderClass}}" placeholder="{{roomPlaceholder}}" ng-model="deliveryData.room">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Подъезд</span>
-                        <input type="text" class="formInput {{entrancePlaceholderClass}}" placeholder="{{entrancePlaceholder}}" ng-model="registrationInputData.entrance">
+                        <input type="text" class="formInput {{entrancePlaceholderClass}}" placeholder="{{entrancePlaceholder}}" ng-model="deliveryData.entrance">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Этаж</span>
-                        <input type="text" class="formInput {{floorPlaceholderClass}}" placeholder="{{floorPlaceholder}}" ng-model="registrationInputData.floor">
+                        <input type="text" class="formInput {{floorPlaceholderClass}}" placeholder="{{floorPlaceholder}}" ng-model="deliveryData.floor">
                     </label>
                 </div>
             </form>
@@ -57,19 +60,19 @@
         <div class="Pickup" ng-if="false">
             <form>
                 <div class="list">
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Имя</span>
-                        <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="registrationInputData.firstname">
+                        <input type="text" class="formInput {{firstnamePlaceholderClass}}" placeholder="{{firstnamePlaceholder}}" ng-model="pickupData.firstname">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Фамилия</span>
-                        <input type="text" class="formInput {{lastnamePlaceholderClass}}" placeholder="{{lastnamePlaceholder}}" ng-model="registrationInputData.lastname">
+                        <input type="text" class="formInput {{lastnamePlaceholderClass}}" placeholder="{{lastnamePlaceholder}}" ng-model="pickupData.lastname">
                     </label>
 
-                    <label class="item item-input">
+                    <label class="item item-input item-stacked-label">
                         <span class="input-label">Телефон</span>
-                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="registrationInputData.phone">
+                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="pickupData.phone">
                     </label>
                 </div>
             </form>

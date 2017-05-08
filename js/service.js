@@ -2,24 +2,30 @@
     'use strict';
 
     angular
-        .module('starter.services', ['ionic'])
+        .module('starter.services', ['ionic', 'ngCordova'])
         .factory('DataService', DataService);
 
-    function DataService($http, $q, $ionicPopup, $ionicActionSheet) {
+    function DataService($http, $q, $ionicPopup, $ionicActionSheet, $cordovaNetwork, $rootScope, $ionicLoading) {
+        var isOnline = true;
+
+        $rootScope.$on('$cordovaNetwork:offline', function(event, networkState) {
+            isOnline = false;
+        });
+
+        $rootScope.$on('$cordovaNetwork:online', function(event, networkState) {
+            isOnline = true;
+        });
+
         var pizzas = [];
         var ingredients = [];
         var shoppingCart = [];
-        var isLoggedIn = false;
-
-        var postConfig = {
-            headers: {
-                'Content-Type': 'json'
-            }
-        };
 
         var service = {
             showAlert: showAlert,
-            getIsLoggedIn: getIsLoggedIn,
+            showLoading: showLoading,
+            hideLoading: hideLoading,
+            loadUserInfo: loadUserInfo,
+            updateUserInfo: updateUserInfo,
             loadData: loadData,
             getAllPizzas: getAllPizzas,
             getPizza: getPizza,
@@ -36,28 +42,41 @@
 
         // Functions
 
-        function showAlert(title) {
+        function showAlert(title, subtitle) {
             $ionicPopup.alert({
-                title: title
+                title: title,
+                subTitle: subtitle
             });
         }
 
-        function getIsLoggedIn() {
-            return isLoggedIn;
+        function showLoading() {
+            $ionicLoading.show({
+                template: 'Загрузка...'
+            });
+        }
+
+        function hideLoading() {
+            $ionicLoading.hide();
         }
 
         function loadData() {
             var defered = $q.defer();
 
-            $http.get('https://ivanteslenok.000webhostapp.com/index.php')
-                .success(function(data) {
-                    pizzas = data;
-                    //console.log(data);
-                    defered.resolve(data);
-                })
-                .error(function() {
-                    showAlert('Ошибка сервера');
-                });
+            if (isOnline) {
+                $http.get('https://ivanteslenok.000webhostapp.com/index.php')
+                    .success(function(data) {
+                        pizzas = data;
+                        //console.log(data);
+                        defered.resolve(data);
+                    })
+                    .error(function() {
+                        showAlert('Ошибка сервера');
+                        defered.reject();
+                    });
+            } else {
+                showAlert('Отсутствует подключение к сети!');
+                defered.reject();
+            }
 
             return defered.promise;
         }
@@ -80,25 +99,30 @@
             return shoppingCart;
         }
 
-        function loadIngredients(hideLoading) {
+        function loadIngredients() {
             var defered = $q.defer();
 
-            if (ingredients.length > 0) {
-                defered.resolve(ingredients);
+            if (isOnline) {
+                if (ingredients.length > 0) {
+                    defered.resolve(ingredients);
 
-                return defered.promise;
+                    return defered.promise;
+                }
+
+                $http.get('https://ivanteslenok.000webhostapp.com/ingredients.php')
+                    .success(function(data) {
+                        ingredients = data;
+                        //console.log(data);
+                        defered.resolve(data);
+                    })
+                    .error(function() {
+                        showAlert('Ошибка сервера');
+                        defered.reject();
+                    });
+            } else {
+                showAlert('Отсутствует подключение к сети!');
+                defered.reject();
             }
-
-            $http.get('https://ivanteslenok.000webhostapp.com/ingredients.php')
-                .success(function(data) {
-                    ingredients = data;
-                    console.log(data);
-                    defered.resolve(data);
-                })
-                .error(function() {
-                    hideLoading();
-                    showAlert('Ошибка сервера');
-                });
 
             return defered.promise;
         }
@@ -110,22 +134,62 @@
         function login(loginData) {
             var defered = $q.defer();
 
-            $http.post('https://ivanteslenok.000webhostapp.com/login.php', loginData)
-                .success(function(data, status) {
-                    defered.resolve(data);
+            if (isOnline) {
+                $http.post('https://ivanteslenok.000webhostapp.com/login.php', loginData)
+                    .success(function(data, status) {
+                        defered.resolve(data);
+                    })
+                    .error(function() {
+                        showAlert('Ошибка сервера');
+                        defered.reject();
+                    });
+            } else {
+                showAlert('Отсутствует подключение к сети!');
+                defered.reject();
+            }
 
-                    if (data.success) {
-                        //showAlert('Вход произведен успешно');
-                        isLoggedIn = true;
-                    } else if (data.username) {
-                        showAlert('Неверный пароль');
-                    } else {
-                        showAlert('Пользователя с таким логином не существует, зарегестрируйтесь');
-                    }
-                })
-                .error(function() {
-                    showAlert('Ошибка сервера');
-                });
+            return defered.promise;
+        }
+
+        function loadUserInfo(username) {
+            var defered = $q.defer();
+
+            if (isOnline) {
+                $http.get('https://ivanteslenok.000webhostapp.com/userInfo.php?username=' + username)
+                    .success(function(data) {
+                        defered.resolve(data);
+                    })
+                    .error(function() {
+                        showAlert('Ошибка сервера');
+                        defered.reject();
+                    });
+            } else {
+                showAlert('Отсутствует подключение к сети!');
+                defered.reject();
+            }
+
+            return defered.promise;
+        }
+
+        function updateUserInfo(username, info) {
+            var defered = $q.defer();
+
+            var updateData = info;
+            updateData.key = username;
+
+            if (isOnline) {
+                $http.post('https://ivanteslenok.000webhostapp.com/updateUser.php', updateData)
+                    .success(function(data, status) {
+                        defered.resolve(data);
+                    })
+                    .error(function() {
+                        showAlert('Ошибка сервера');
+                        defered.reject();
+                    });
+            } else {
+                showAlert('Отсутствует подключение к сети!');
+                defered.reject();
+            }
 
             return defered.promise;
         }
@@ -133,19 +197,23 @@
         function registration(registrationData) {
             var defered = $q.defer();
 
-            $http.post('https://ivanteslenok.000webhostapp.com/registration.php', registrationData)
-                .success(function(data, status) {
-                    defered.resolve(data);
+            if (isOnline) {
+                $http.post('https://ivanteslenok.000webhostapp.com/registration.php', registrationData)
+                    .success(function(data, status) {
+                        defered.resolve(data);
 
-                    if (data.success) {
-                        //showAlert('Регистрация прошла успешно');
-                    } else {
-                        showAlert('Пользователь с таким логином уже существует');
-                    }
-                })
-                .error(function() {
-                    showAlert('Ошибка сервера');
-                });
+                        if (!data.success) {
+                            showAlert('Пользователь с таким логином уже существует');
+                        }
+                    })
+                    .error(function() {
+                        showAlert('Ошибка сервера');
+                        defered.reject();
+                    });
+            } else {
+                showAlert('Отсутствует подключение к сети!');
+                defered.reject();
+            }
 
             return defered.promise;
         }
@@ -208,7 +276,7 @@
                         testCart.pizzaCount++;
                     }
 
-                    showAlert('Пицца "' + shoppingCartObj.pizzaName + ' ' + shoppingCartObj.pizzaSize + '" добавлена в корзину');
+                    showAlert('Пицца "' + shoppingCartObj.pizzaName + ' ' + shoppingCartObj.pizzaSize + '" добавлена в корзину', 'Количество заказываемых пицц может быть изменено в корзине');
 
                     console.log(shoppingCart);
 
@@ -282,7 +350,7 @@
                         testCart.pizzaCount++;
                     }
 
-                    showAlert('Пицца добавлена в корзину');
+                    showAlert('Пицца добавлена в корзину', 'Количество заказываемых пицц может быть изменено в корзине');
 
                     console.log(shoppingCart);
 

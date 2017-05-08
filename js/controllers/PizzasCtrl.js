@@ -6,15 +6,18 @@
         .controller('PizzasCtrl', Pizzas);
 
     function Pizzas($scope, DataService) {
+        DataService.showLoading();
+
         $scope.pizzas = [];
 
         function refreshData() {
             DataService.loadData().then(
                 function(value) {
                     $scope.pizzas = value;
+                    DataService.hideLoading();
                 },
                 function(reason) {
-                    DataService.showAlert('Эта ошибка никогда не произойдет');
+                    DataService.hideLoading();
                 }
             ).finally(function() {
                 // останавливаем иконку загрузки

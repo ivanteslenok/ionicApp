@@ -13,6 +13,22 @@
         //$scope.$on('$ionicView.enter', function(e) {
         //});
 
+        // Меню ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        var isLoggedIn = false;
+
+        function changeLoginOnRoom() {
+            if (isLoggedIn) {
+                $scope.menuLoginText = 'Личный кабинет';
+                $scope.menuLoginAction = room;
+            } else {
+                $scope.menuLoginText = 'Войти/Регистрация';
+                $scope.menuLoginAction = login;
+            }
+        }
+
+        changeLoginOnRoom();
+
         // Вход ///////////////////////////////////////////////////////////////////////////////////////////////
 
         // Информация для входа
@@ -96,6 +112,33 @@
         // Зарегестрироваться
         $scope.doRegistration = doRegistration;
 
+        // Личный кабинет ///////////////////////////////////////////////////////////////////////////
+
+        // Модальное окно для Личного кабинета
+        $ionicModal.fromTemplateUrl('templates/room.html', {
+            scope: $scope
+        }).then(function(modal) {
+            $scope.modalRoom = modal;
+        });
+
+        // Открытие модального окна Личного кабинета
+        $scope.room = room;
+
+        // Закрытие модального окна Личного кабинета
+        $scope.closeRoom = closeRoom;
+
+        // Выйти
+        $scope.escapeRoom = escapeRoom;
+
+        // Редактировать
+        $scope.editRoom = editRoom;
+
+        // Закрыть редактирование
+        $scope.cancelEdit = cancelEdit;
+
+        // Применит редактирование
+        $scope.applyChanges = applyChanges;
+
         // Корзина /////////////////////////////////////////////////////////////////////////////////////     
 
         // Модальное окно для "Корзины"
@@ -173,18 +216,18 @@
 
         // Заказ ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        // Создание окна регистрации
+        // Создание модального окна  Оформления заказа
         $ionicModal.fromTemplateUrl('templates/order.html', {
             scope: $scope
         }).then(function(modal) {
             $scope.modalOrder = modal;
         });
 
-        // Закрытие модального окна регистрации
+        // Закрытие модального окна  Оформления заказа
         $scope.closeOrder = closeOrder;
 
         // Информация для заказа
-        var orderData = {
+        $scope.deliveryData = {
             firstname: null,
             lastname: null,
             phone: null,
@@ -195,12 +238,26 @@
             floor: null
         };
 
+        $scope.pickupData = {
+            firstname: null,
+            lastname: null,
+            phone: null
+        };
+
         // Сделать покупку
-        $scope.doPurchase = function() {};
+        $scope.doPurchase = function() {
+            if (!validateDelivery()) {
+                return;
+            }
+        };
 
         // Functions ///////////////////////////////////////////////////////////////////////////////////////
 
-        function login() {
+        function login(register) {
+            if (register) {
+                DataService.showAlert('Регистрация прошла успешно', 'Теперь вы можете войти');
+            }
+
             defaultLoginPlaceholders();
             $scope.loginBtnDisabled = false;
             $scope.modalLogin.show();
@@ -221,22 +278,44 @@
                 return;
             }
 
+            $scope.loginBtnDisabled = true;
+
+            DataService.showLoading();
+
             loginData.username = $scope.loginInputData.username.trim();
             loginData.password = $scope.loginInputData.password.trim();
-
-            $scope.loginBtnDisabled = true;
 
             DataService.login(loginData).then(
                 function(value) {
                     if (value.success) {
-                        alert('вошел');
-                        closeLogin();
+                        DataService.loadUserInfo(loginData.username).then(
+                            function(value) {
+                                $scope.loginBtnDisabled = false;
+                                DataService.hideLoading();
+                                closeLogin();
+                                isLoggedIn = true;
+                                changeLoginOnRoom();
+                                room(value);
+                                DataService.showAlert('Вход произведен успешно');
+                            },
+                            function(reason) {
+                                $scope.loginBtnDisabled = false;
+                                DataService.hideLoading();
+                            }
+                        );
+                    } else if (value.username) {
+                        $scope.loginBtnDisabled = false;
+                        DataService.hideLoading();
+                        DataService.showAlert('Неверный пароль');
                     } else {
                         $scope.loginBtnDisabled = false;
+                        DataService.hideLoading();
+                        DataService.showAlert('Пользователя с таким логином не существует, зарегестрируйтесь');
                     }
                 },
                 function(reason) {
-                    DataService.showAlert('Эта ошибка никогда не произойдет');
+                    $scope.loginBtnDisabled = false;
+                    DataService.hideLoading();
                 }
             );
         }
@@ -285,6 +364,10 @@
                 return;
             }
 
+            $scope.registerBtnDisabled = true;
+
+            DataService.showLoading();
+
             registrationData.username = $scope.registrationInputData.username.trim();
             registrationData.password = $scope.registrationInputData.password.trim();
             registrationData.firstname = $scope.registrationInputData.firstname.trim();
@@ -296,23 +379,110 @@
             registrationData.room = $scope.registrationInputData.room.trim();
             registrationData.floor = $scope.registrationInputData.floor.trim();
 
-            $scope.registerBtnDisabled = true;
-
             DataService.registration(registrationData).then(
                 function(value) {
+                    $scope.registerBtnDisabled = false;
+                    DataService.hideLoading();
+
                     if (value.success) {
+                        $scope.loginInputData.username = registrationData.username;
+                        $scope.loginInputData.password = registrationData.password;
+
                         closeRegistration(false);
-                    } else {
-                        $scope.registerBtnDisabled = false;
+
+                        login(true);
                     }
                 },
                 function(reason) {
-                    DataService.showAlert('Эта ошибка никогда не произойдет');
+                    $scope.registerBtnDisabled = false;
+                    DataService.hideLoading();
                 }
             );
         }
 
-        // Открытие модального окна регистрации
+        function room(userInfo) {
+            $scope.userInfo = userInfo;
+
+            // for (var key in $scope.userInfo) {
+            //     if ($scope.userInfo[key] === '-' || $scope.userInfo[key] === '0') {
+            //         $scope.userInfo[key] = 'Не указано';
+            //     }
+            // }
+
+            $scope.isEdit = false;
+
+            //$scope.userInfo = userInfo;
+            $scope.modalRoom.show();
+        }
+
+        function closeRoom() {
+            $scope.isEdit = false;
+            $scope.modalRoom.hide();
+        }
+
+        function escapeRoom() {
+            isLoggedIn = false;
+            changeLoginOnRoom();
+            closeRoom();
+        }
+
+        function editRoom(userInfo) {
+            $scope.isEdit = true;
+            $scope.applyChangesBtnDisabled = false;
+            $scope.editUserInfo = {};
+
+            for (var key in userInfo) {
+                if (userInfo[key] === 'Не указано') {
+                    $scope.editUserInfo[key] = '';
+                } else {
+                    $scope.editUserInfo[key] = userInfo[key];
+                }
+            }
+
+            defaultUserInfoPlaceholders();
+        }
+
+        function cancelEdit() {
+            $scope.isEdit = false;
+        }
+
+        function applyChanges(username, info) {
+            if (!validateUserInfo()) {
+                return;
+            }
+
+            $scope.applyChangesBtnDisabled = true;
+            DataService.showLoading();
+
+            DataService.updateUserInfo(username, info).then(
+                function(value) {
+                    if (value.success) {
+                        DataService.loadUserInfo(info.username).then(
+                            function(value) {
+                                $scope.applyChangesBtnDisabled = false;
+                                DataService.hideLoading();
+                                userInfo = value;
+                                closeRoom();
+                                room(userInfo);
+                                DataService.showAlert('Информация обновлена');
+                            },
+                            function(reason) {
+                                $scope.applyChangesBtnDisabled = false;
+                                DataService.hideLoading();
+                            }
+                        );
+                    }
+                },
+                function(reason) {
+                    $scope.applyChangesBtnDisabled = false;
+                    DataService.hideLoading();
+                }
+            );
+
+            $scope.isEdit = false;
+        }
+
+        // Открытие модального окна Оформления заказа
         function order() {
             $scope.modalOrder.show();
         }
@@ -327,6 +497,26 @@
 
             $scope.usernamePlaceholderClass = null;
             $scope.passwordPlaceholderClass = null;
+        }
+
+        function defaultUserInfoPlaceholders() {
+            $scope.firstnamePlaceholder = 'Введите ваше имя';
+            $scope.lastnamePlaceholder = 'Введите вашу фамилию';
+            $scope.phonePlaceholder = 'Введите ваш телефон';
+            $scope.streetPlaceholder = 'Улица';
+            $scope.housePlaceholder = 'Дом';
+            $scope.entrancePlaceholder = 'Подъезд';
+            $scope.roomPlaceholder = 'Квартира';
+            $scope.floorPlaceholder = 'Этаж';
+
+            $scope.firstnamePlaceholderClass = null;
+            $scope.lastnamePlaceholderClass = null;
+            $scope.phonePlaceholderClass = null;
+            $scope.streetPlaceholderClass = null;
+            $scope.housePlaceholderClass = null;
+            $scope.entrancePlaceholderClass = null;
+            $scope.roomPlaceholderClass = null;
+            $scope.floorPlaceholderClass = null;
         }
 
         function defaultRegistrationPlaceholders() {
@@ -372,6 +562,66 @@
                 $scope.loginInputData.password = null;
                 $scope.passwordPlaceholder = 'Вы не ввели пароль';
                 $scope.passwordPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateUserInfo() {
+            if ($scope.editUserInfo.firstname.trim().length > 20) {
+                $scope.editUserInfo.firstname = '';
+                $scope.firstnamePlaceholder = 'Слишком длинное имя';
+                $scope.firstnamePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.editUserInfo.lastname.trim().length > 20) {
+                $scope.editUserInfo.lastname = '';
+                $scope.lastnamePlaceholder = 'Слишком длинная фамилия';
+                $scope.lastnamePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.editUserInfo.street.trim().length > 40) {
+                $scope.editUserInfo.street = '';
+                $scope.streetPlaceholder = 'Слишком длинное название';
+                $scope.streetPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.editUserInfo.house.trim().length > 0 && !isUInt($scope.editUserInfo.house)) {
+                $scope.editUserInfo.house = '';
+                $scope.housePlaceholder = 'Неверный формат';
+                $scope.housePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.editUserInfo.room.trim().length > 0 && !isUInt($scope.editUserInfo.room)) {
+                $scope.editUserInfo.room = '';
+                $scope.roomPlaceholder = 'Неверный формат';
+                $scope.roomPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.editUserInfo.entrance.trim().length > 0 && !isUInt($scope.editUserInfo.entrance)) {
+                $scope.editUserInfo.entrance = '';
+                $scope.entrancePlaceholder = 'Неверный формат';
+                $scope.entrancePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.editUserInfo.floor.trim().length > 0 && !isUInt($scope.editUserInfo.floor)) {
+                $scope.editUserInfo.floor = '';
+                $scope.floorPlaceholder = 'Неверный формат';
+                $scope.floorPlaceholderClass = 'formError';
 
                 return false;
             }
@@ -480,12 +730,20 @@
         }
     }
 
+    function validateDelivery() {
+
+    }
+
+    function validatePickup() {
+
+    }
+
     function isUInt(str) {
         if (str.length <= 0) {
             return false;
         }
 
-        num = +str;
+        var num = +str;
 
         return isFinite(num) && ((num ^ 0) === num) && num >= 0 && num <= 255;
     }

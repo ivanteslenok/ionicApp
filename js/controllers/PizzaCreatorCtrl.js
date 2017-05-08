@@ -5,7 +5,7 @@
         .module('starter.controllers')
         .controller('PizzaCreatorCtrl', PizzaCreator);
 
-    function PizzaCreator($scope, $ionicModal, $ionicSlideBoxDelegate, $ionicLoading, DataService) {
+    function PizzaCreator($scope, $ionicModal, $ionicSlideBoxDelegate, DataService) {
         // Создание окна ингредиентов
         $ionicModal.fromTemplateUrl('templates/ingredients.html', {
             scope: $scope
@@ -24,9 +24,9 @@
         // Открытие модального окна ингредиентов
         $scope.openIngredients = function() {
             $scope.addBtnDisabled = true;
-            showLoading();
+            DataService.showLoading();
 
-            DataService.loadIngredients(hideLoading).then(
+            DataService.loadIngredients().then(
                 function(value) {
                     ingredients = value;
 
@@ -51,10 +51,12 @@
                     });
 
                     $scope.modalIngredients.show();
-                    hideLoading();
+                    DataService.hideLoading();
+                    $scope.addBtnDisabled = false;
                 },
                 function(reason) {
-                    DataService.showAlert('Эта ошибка никогда не произойдет');
+                    DataService.hideLoading();
+                    $scope.addBtnDisabled = false;
                 }
             );
         };
@@ -115,16 +117,5 @@
         $scope.previousSlide = function() {
             $ionicSlideBoxDelegate.previous();
         };
-
-        function showLoading() {
-            $ionicLoading.show({
-                template: 'Загрузка...'
-            });
-        }
-
-        function hideLoading() {
-            $scope.addBtnDisabled = false;
-            $ionicLoading.hide();
-        }
     }
 })();

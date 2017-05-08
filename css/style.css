@@ -51,7 +51,7 @@
 }
 
 .input-label {
-    min-width: 140px;
+    /*min-width: 130px;*/
 }
 
 
@@ -261,12 +261,21 @@
 
 /*order.html*/
 
+.orderSubHeader {
+    height: 10%;
+}
+
+.orderSubHeader button {
+    font-size: 14pt !important;
+}
+
 .orderContent {
     margin: 2%;
     padding: 3%;
     border: 0.5px solid darkgrey;
     border-radius: 1%;
-    height: 80%;
+    height: 69%;
+    top: 17%;
 }
 
 .orderFooter {
@@ -274,5 +283,24 @@
 }
 
 .orderFooter button {
+    font-size: 14pt !important;
+}
+
+
+/*room.html*/
+
+.roomContent {
+    margin: 2%;
+    padding: 3%;
+    border: 0.5px solid darkgrey;
+    border-radius: 1%;
+    height: 80%;
+}
+
+.roomFooter {
+    height: 11%;
+}
+
+.roomFooter button {
     font-size: 14pt !important;
 }
