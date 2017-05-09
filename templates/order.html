@@ -5,14 +5,14 @@
 
     <ion-header-bar class="bar-subheader orderSubHeader">
         <div class="button-bar">
-            <button class="button button-calm">Доставка</button>
-            <button class="button button-calm button-outline">Самовывоз</button>
+            <button class="button button-calm" ng-class="deliveryClass" ng-click="delivery()">Доставка</button>
+            <button class="button button-calm" ng-class="pickupClass" ng-click="pickup()">Самовывоз</button>
         </div>
     </ion-header-bar>
 
     <ion-content class="orderContent">
-        <div class="delivery" ng-if="true">
-            <form>
+        <div ng-if="isDelivery">
+            <form name="deliveryForm">
                 <div class="list">
                     <label class="item item-input item-stacked-label">
                         <span class="input-label">Имя</span>
@@ -26,7 +26,7 @@
 
                     <label class="item item-input item-stacked-label">
                         <span class="input-label">Телефон</span>
-                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="deliveryData.phone">
+                        <input type="text" name="phone" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" mask="+999(99)-999-99-99" ng-model="deliveryData.phone">
                     </label>
 
                     <label class="item item-input item-stacked-label">
@@ -57,8 +57,8 @@
             </form>
         </div>
 
-        <div class="Pickup" ng-if="false">
-            <form>
+        <div ng-if="!isDelivery">
+            <form name="pickupForm">
                 <div class="list">
                     <label class="item item-input item-stacked-label">
                         <span class="input-label">Имя</span>
@@ -72,7 +72,7 @@
 
                     <label class="item item-input item-stacked-label">
                         <span class="input-label">Телефон</span>
-                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="pickupData.phone">
+                        <input type="text" name="phone" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" mask="+999(99)-999-99-99" ng-model="pickupData.phone">
                     </label>
                 </div>
             </form>
@@ -84,7 +84,7 @@
             <button class="button button-assertive" ng-click="closeOrder()">
                 Отмена
             </button>
-            <button class="button button-balanced" ng-disabled="registerBtnDisabled" ng-click="doPurchase()">
+            <button class="button button-balanced" ng-click="doPurchase()">
                 Заказать
             </button>
         </div>

@@ -40,7 +40,7 @@
         </ion-list>
 
         <div ng-if="isEdit">
-            <form>
+            <form name="roomForm">
                 <div class="list">
                     <label class="item item-input item-stacked-label">
                         <span class="input-label">Имя</span>
@@ -54,7 +54,7 @@
 
                     <label class="item item-input item-stacked-label">
                         <span class="input-label">Телефон</span>
-                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="editUserInfo.phone">
+                        <input type="text" name="phone" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" mask="+999(99)-999-99-99" ng-model="editUserInfo.phone">
                     </label>
 
                     <label class="item item-input item-stacked-label">
@@ -100,7 +100,7 @@
             <button class="button button-assertive" ng-click="cancelEdit()">
                 Отмена
             </button>
-            <button class="button button-balanced" ng-disabled="applyChangesBtnDisabled" ng-click="applyChanges(userInfo.username, editUserInfo)">
+            <button class="button button-balanced" ng-disabled="applyChangesBtnDisabled" ng-click="applyChanges(editUserInfo)">
                 Готово
             </button>
         </div>

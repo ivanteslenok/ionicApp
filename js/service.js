@@ -171,14 +171,11 @@
             return defered.promise;
         }
 
-        function updateUserInfo(username, info) {
+        function updateUserInfo(userInfo) {
             var defered = $q.defer();
 
-            var updateData = info;
-            updateData.key = username;
-
             if (isOnline) {
-                $http.post('https://ivanteslenok.000webhostapp.com/updateUser.php', updateData)
+                $http.post('https://ivanteslenok.000webhostapp.com/updateUser.php', userInfo)
                     .success(function(data, status) {
                         defered.resolve(data);
                     })

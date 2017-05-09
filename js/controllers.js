@@ -2,5 +2,5 @@
     'use strict';
 
     angular
-        .module('starter.controllers', ['ionic']);
+        .module('starter.controllers', ['ionic', 'ngMask']);
 })();

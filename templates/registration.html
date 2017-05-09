@@ -6,7 +6,7 @@
         </div>
     </ion-header-bar>
     <ion-content class="registrationContent">
-        <form>
+        <form name="registerForm">
             <div class="list">
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Логин</span>
@@ -40,7 +40,7 @@
 
                     <label class="item item-input item-stacked-label">
                         <span class="input-label">Телефон</span>
-                        <input type="text" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" ng-model="registrationInputData.phone">
+                        <input type="text" name="phone" class="formInput {{phonePlaceholderClass}}" placeholder="{{phonePlaceholder}}" mask="+999(99)-999-99-99" ng-model="registrationInputData.phone">
                     </label>
 
                     <label class="item item-input item-stacked-label">

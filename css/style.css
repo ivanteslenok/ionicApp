@@ -304,3 +304,23 @@
 .roomFooter button {
     font-size: 14pt !important;
 }
+
+
+/*info.html*/
+
+.info {
+    text-align: center;
+    margin: 5% 10%;
+    font-size: 14pt;
+}
+
+.info li {
+    font-weight: bold;
+}
+
+
+/*contacts.html*/
+
+.contactsItem {
+    text-align: center;
+}

@@ -17,6 +17,14 @@
 
         var isLoggedIn = false;
 
+        if (window.localStorage.getItem('isLoggedIn') !== undefined) {
+            isLoggedIn = window.localStorage.getItem('isLoggedIn') === '0' ? false : true;
+        } else {
+            isLoggedIn = false;
+        }
+
+        var userInfo = {};
+
         function changeLoginOnRoom() {
             if (isLoggedIn) {
                 $scope.menuLoginText = 'Личный кабинет';
@@ -244,12 +252,61 @@
             phone: null
         };
 
-        // Сделать покупку
-        $scope.doPurchase = function() {
+        var activeClass = '';
+        var unActiveClass = 'button-outline';
+
+        $scope.deliveryClass = activeClass;
+        $scope.pickupClass = unActiveClass;
+        $scope.isDelivery = true;
+        $scope.doPurchase = doDelivery;
+
+        $scope.delivery = function() {
+            defaultUserInfoPlaceholders();
+            $scope.isDelivery = true;
+            $scope.doPurchase = doDelivery;
+            $scope.deliveryClass = activeClass;
+            $scope.pickupClass = unActiveClass;
+        };
+
+        $scope.pickup = function() {
+            defaultUserInfoPlaceholders();
+            $scope.isDelivery = false;
+            $scope.doPurchase = doPickup;
+            $scope.deliveryClass = unActiveClass;
+            $scope.pickupClass = activeClass;
+        };
+
+        function doDelivery() {
             if (!validateDelivery()) {
                 return;
             }
-        };
+
+            // defaultUserInfoPlaceholders();
+
+            // for (var key in $scope.deliveryData) {
+            //     $scope.deliveryData[key] = null;
+            // }
+
+            // DataService.showAlert('Заказ оформлен');
+
+            closeOrder(true);
+        }
+
+        function doPickup() {
+            if (!validatePickup()) {
+                return;
+            }
+
+            // defaultUserInfoPlaceholders();
+
+            // for (var key in $scope.pickupData) {
+            //     $scope.pickupData[key] = null;
+            // }
+
+            // DataService.showAlert('Заказ оформлен');
+
+            closeOrder(true);
+        }
 
         // Functions ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -288,21 +345,14 @@
             DataService.login(loginData).then(
                 function(value) {
                     if (value.success) {
-                        DataService.loadUserInfo(loginData.username).then(
-                            function(value) {
-                                $scope.loginBtnDisabled = false;
-                                DataService.hideLoading();
-                                closeLogin();
-                                isLoggedIn = true;
-                                changeLoginOnRoom();
-                                room(value);
-                                DataService.showAlert('Вход произведен успешно');
-                            },
-                            function(reason) {
-                                $scope.loginBtnDisabled = false;
-                                DataService.hideLoading();
-                            }
-                        );
+                        $scope.loginBtnDisabled = false;
+                        DataService.hideLoading();
+                        closeLogin();
+                        window.localStorage.setItem('isLoggedIn', '1');
+                        window.localStorage.setItem('username', loginData.username);
+                        isLoggedIn = true;
+                        changeLoginOnRoom();
+                        room(loginData.username, true);
                     } else if (value.username) {
                         $scope.loginBtnDisabled = false;
                         DataService.hideLoading();
@@ -400,19 +450,40 @@
             );
         }
 
-        function room(userInfo) {
-            $scope.userInfo = userInfo;
-
-            // for (var key in $scope.userInfo) {
-            //     if ($scope.userInfo[key] === '-' || $scope.userInfo[key] === '0') {
-            //         $scope.userInfo[key] = 'Не указано';
-            //     }
-            // }
-
+        function room(username, isEnter, isChanged) {
+            var roomUser = username || window.localStorage.getItem('username');
             $scope.isEdit = false;
 
-            //$scope.userInfo = userInfo;
-            $scope.modalRoom.show();
+            if (isEnter) {
+                DataService.showAlert('Вход произведен успешно');
+            }
+
+            if (isChanged) {
+                DataService.showAlert('Информация обновлена');
+            }
+
+            DataService.showLoading();
+
+            DataService.loadUserInfo(roomUser).then(
+                function(value) {
+                    $scope.userInfo = value;
+
+                    for (var key in $scope.userInfo) {
+                        if ($scope.userInfo[key] === '-' || $scope.userInfo[key] === '0') {
+                            $scope.userInfo[key] = 'Не указано';
+                        }
+                    }
+
+                    DataService.hideLoading();
+
+                    if (!isChanged) {
+                        $scope.modalRoom.show();
+                    }
+                },
+                function(reason) {
+                    DataService.hideLoading();
+                }
+            );
         }
 
         function closeRoom() {
@@ -421,6 +492,8 @@
         }
 
         function escapeRoom() {
+            window.localStorage.setItem('isLoggedIn', '0');
+            window.localStorage.removeItem('username');
             isLoggedIn = false;
             changeLoginOnRoom();
             closeRoom();
@@ -446,7 +519,7 @@
             $scope.isEdit = false;
         }
 
-        function applyChanges(username, info) {
+        function applyChanges(userInfo) {
             if (!validateUserInfo()) {
                 return;
             }
@@ -454,23 +527,14 @@
             $scope.applyChangesBtnDisabled = true;
             DataService.showLoading();
 
-            DataService.updateUserInfo(username, info).then(
+            DataService.updateUserInfo(userInfo).then(
                 function(value) {
                     if (value.success) {
-                        DataService.loadUserInfo(info.username).then(
-                            function(value) {
-                                $scope.applyChangesBtnDisabled = false;
-                                DataService.hideLoading();
-                                userInfo = value;
-                                closeRoom();
-                                room(userInfo);
-                                DataService.showAlert('Информация обновлена');
-                            },
-                            function(reason) {
-                                $scope.applyChangesBtnDisabled = false;
-                                DataService.hideLoading();
-                            }
-                        );
+                        $scope.applyChangesBtnDisabled = false;
+                        DataService.hideLoading();
+                        $scope.isEdit = false;
+                        window.localStorage.setItem('username', userInfo.username);
+                        room(false, false, true);
                     }
                 },
                 function(reason) {
@@ -478,17 +542,60 @@
                     DataService.hideLoading();
                 }
             );
-
-            $scope.isEdit = false;
         }
 
         // Открытие модального окна Оформления заказа
         function order() {
+            if (isLoggedIn) {
+                DataService.showLoading();
+                var username = window.localStorage.getItem('username');
+
+                DataService.loadUserInfo(username).then(
+                    function(value) {
+                        var key;
+
+                        for (key in $scope.deliveryData) {
+                            $scope.deliveryData[key] = value[key];
+                        }
+
+                        key = null;
+
+                        for (key in $scope.pickupData) {
+                            $scope.pickupData[key] = value[key];
+                        }
+
+                        DataService.hideLoading();
+                    },
+                    function(reason) {
+                        DataService.hideLoading();
+                    }
+                );
+            }
+
+            defaultUserInfoPlaceholders();
             $scope.modalOrder.show();
         }
 
         function closeOrder(action) {
             $scope.modalOrder.hide();
+
+            if (action) {
+                DataService.showAlert('Заказ оформлен');
+            }
+
+            defaultUserInfoPlaceholders();
+
+            var key;
+
+            for (key in $scope.deliveryData) {
+                $scope.deliveryData[key] = null;
+            }
+
+            key = null;
+
+            for (key in $scope.pickupData) {
+                $scope.pickupData[key] = null;
+            }
         }
 
         function defaultLoginPlaceholders() {
@@ -502,11 +609,11 @@
         function defaultUserInfoPlaceholders() {
             $scope.firstnamePlaceholder = 'Введите ваше имя';
             $scope.lastnamePlaceholder = 'Введите вашу фамилию';
-            $scope.phonePlaceholder = 'Введите ваш телефон';
-            $scope.streetPlaceholder = 'Улица';
-            $scope.housePlaceholder = 'Дом';
-            $scope.entrancePlaceholder = 'Подъезд';
-            $scope.roomPlaceholder = 'Квартира';
+            $scope.phonePlaceholder = 'код страны (код оператора) номер';
+            $scope.streetPlaceholder = 'Название улицы';
+            $scope.housePlaceholder = '№ дома';
+            $scope.entrancePlaceholder = '№ подъезда';
+            $scope.roomPlaceholder = '№ квартиры';
             $scope.floorPlaceholder = 'Этаж';
 
             $scope.firstnamePlaceholderClass = null;
@@ -523,11 +630,11 @@
             $scope.confirmPasswordPlaceholder = 'Повторите ваш пароль';
             $scope.firstnamePlaceholder = 'Введите ваше имя';
             $scope.lastnamePlaceholder = 'Введите вашу фамилию';
-            $scope.phonePlaceholder = 'Введите ваш телефон';
-            $scope.streetPlaceholder = 'Улица';
-            $scope.housePlaceholder = 'Дом';
-            $scope.entrancePlaceholder = 'Подъезд';
-            $scope.roomPlaceholder = 'Квартира';
+            $scope.phonePlaceholder = 'код страны (код оператора) номер';
+            $scope.streetPlaceholder = 'Название улицы';
+            $scope.housePlaceholder = '№ дома';
+            $scope.entrancePlaceholder = '№ подъезда';
+            $scope.roomPlaceholder = '№ квартиры';
             $scope.floorPlaceholder = 'Этаж';
 
             $scope.confirmPasswordPlaceholderClass = null;
@@ -584,6 +691,16 @@
                 $scope.lastnamePlaceholderClass = 'formError';
 
                 return false;
+            }
+
+            if ($scope.editUserInfo.phone.length > 0) {
+                if (roomForm.phone.className.indexOf('ng-invalid') !== -1) {
+                    $scope.editUserInfo.phone = '';
+                    $scope.phonePlaceholder = 'Неверный формат';
+                    $scope.phonePlaceholderClass = 'formError';
+
+                    return false;
+                }
             }
 
             if ($scope.editUserInfo.street.trim().length > 40) {
@@ -686,6 +803,16 @@
                 return false;
             }
 
+            if ($scope.registrationInputData.phone.length > 0) {
+                if (registerForm.phone.className.indexOf('ng-invalid') !== -1) {
+                    $scope.registrationInputData.phone = '';
+                    $scope.phonePlaceholder = 'Неверный формат';
+                    $scope.phonePlaceholderClass = 'formError';
+
+                    return false;
+                }
+            }
+
             if ($scope.registrationInputData.street.trim().length > 40) {
                 $scope.registrationInputData.street = '';
                 $scope.streetPlaceholder = 'Слишком длинное название';
@@ -728,14 +855,194 @@
 
             return true;
         }
-    }
 
-    function validateDelivery() {
+        function validateDelivery() {
+            if ($scope.deliveryData.firstname === null || $scope.deliveryData.firstname.trim().length <= 0) {
+                $scope.deliveryData.firstname = null;
+                $scope.firstnamePlaceholder = 'Вы не ввели имя';
+                $scope.firstnamePlaceholderClass = 'formError';
 
-    }
+                return false;
+            }
 
-    function validatePickup() {
+            if ($scope.deliveryData.firstname.trim().length > 20) {
+                $scope.deliveryData.firstname = null;
+                $scope.firstnamePlaceholder = 'Слишком длинное имя';
+                $scope.firstnamePlaceholderClass = 'formError';
 
+                return false;
+            }
+
+            if ($scope.deliveryData.lastname === null || $scope.deliveryData.lastname.trim().length <= 0) {
+                $scope.deliveryData.lastname = null;
+                $scope.lastnamePlaceholder = 'Вы не ввели фамилию';
+                $scope.lastnamePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.lastname.trim().length > 20) {
+                $scope.deliveryData.lastname = null;
+                $scope.lastnamePlaceholder = 'Слишком длинная фамилия';
+                $scope.lastnamePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.phone === null || $scope.deliveryData.phone.trim().length <= 0) {
+                $scope.deliveryData.phone = null;
+                $scope.phonePlaceholder = 'Вы не ввели номер телефона';
+                $scope.phonePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.phone.length > 0) {
+                if (deliveryForm.phone.className.indexOf('ng-invalid') !== -1) {
+                    $scope.deliveryData.phone = null;
+                    $scope.phonePlaceholder = 'Неверный формат';
+                    $scope.phonePlaceholderClass = 'formError';
+
+                    return false;
+                }
+            }
+
+            if ($scope.deliveryData.street === null || $scope.deliveryData.street.trim().length <= 0) {
+                $scope.deliveryData.street = null;
+                $scope.streetPlaceholder = 'Вы не ввели название улицы';
+                $scope.streetPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.street.trim().length > 40) {
+                $scope.deliveryData.street = null;
+                $scope.streetPlaceholder = 'Слишком длинное название';
+                $scope.streetPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.house === null || $scope.deliveryData.house.trim().length <= 0) {
+                $scope.deliveryData.house = null;
+                $scope.housePlaceholder = 'Вы не ввели № дома';
+                $scope.housePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.house.trim().length > 0 && !isUInt($scope.deliveryData.house)) {
+                $scope.deliveryData.house = null;
+                $scope.housePlaceholder = 'Неверный формат';
+                $scope.housePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.room === null || $scope.deliveryData.room.trim().length <= 0) {
+                $scope.deliveryData.room = null;
+                $scope.roomPlaceholder = 'Вы не ввели № квартиры';
+                $scope.roomPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.room.trim().length > 0 && !isUInt($scope.deliveryData.room)) {
+                $scope.deliveryData.room = null;
+                $scope.roomPlaceholder = 'Неверный формат';
+                $scope.roomPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.entrance === null || $scope.deliveryData.entrance.trim().length <= 0) {
+                $scope.deliveryData.entrance = null;
+                $scope.entrancePlaceholder = 'Вы не ввели № подъезда';
+                $scope.entrancePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.entrance.trim().length > 0 && !isUInt($scope.deliveryData.entrance)) {
+                $scope.deliveryData.entrance = null;
+                $scope.entrancePlaceholder = 'Неверный формат';
+                $scope.entrancePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.floor === null || $scope.deliveryData.floor.trim().length <= 0) {
+                $scope.deliveryData.floor = null;
+                $scope.floorPlaceholder = 'Вы не ввели этаж';
+                $scope.floorPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.deliveryData.floor.trim().length > 0 && !isUInt($scope.deliveryData.floor)) {
+                $scope.deliveryData.floor = null;
+                $scope.floorPlaceholder = 'Неверный формат';
+                $scope.floorPlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            return true;
+        }
+
+        function validatePickup() {
+            if ($scope.pickupData.firstname === null || $scope.pickupData.firstname.trim().length <= 0) {
+                $scope.pickupData.firstname = null;
+                $scope.firstnamePlaceholder = 'Вы не ввели имя';
+                $scope.firstnamePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.pickupData.firstname.trim().length > 20) {
+                $scope.pickupData.firstname = null;
+                $scope.firstnamePlaceholder = 'Слишком длинное имя';
+                $scope.firstnamePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.pickupData.lastname === null || $scope.pickupData.lastname.trim().length <= 0) {
+                $scope.pickupData.lastname = null;
+                $scope.lastnamePlaceholder = 'Вы не ввели фамилию';
+                $scope.lastnamePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.pickupData.lastname.trim().length > 20) {
+                $scope.pickupData.lastname = null;
+                $scope.lastnamePlaceholder = 'Слишком длинная фамилия';
+                $scope.lastnamePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.pickupData.phone === null || $scope.pickupData.phone.trim().length <= 0) {
+                $scope.pickupData.phone = null;
+                $scope.phonePlaceholder = 'Вы не ввели номер телефона';
+                $scope.phonePlaceholderClass = 'formError';
+
+                return false;
+            }
+
+            if ($scope.pickupData.phone.length > 0) {
+                if (pickupForm.phone.className.indexOf('ng-invalid') !== -1) {
+                    $scope.pickupData.phone = null;
+                    $scope.phonePlaceholder = 'Неверный формат';
+                    $scope.phonePlaceholderClass = 'formError';
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 
     function isUInt(str) {
