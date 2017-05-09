@@ -139,11 +139,11 @@
     padding: 3%;
     border: 0.5px solid dimgray;
     border-radius: 1%;
-    height: 77%;
+    height: calc(90% - 90px);
 }
 
 .pizzaCreatorFooter {
-    height: 14%;
+    height: 90px;
 }
 
 .pizzaCreatorDeleteButton {

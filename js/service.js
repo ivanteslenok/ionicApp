@@ -63,7 +63,7 @@
             var defered = $q.defer();
 
             if (isOnline) {
-                $http.get('https://ivanteslenok.000webhostapp.com/index.php')
+                $http.get('https://pizza-server.000webhostapp.com/index.php')
                     .success(function(data) {
                         pizzas = data;
                         //console.log(data);
@@ -109,7 +109,7 @@
                     return defered.promise;
                 }
 
-                $http.get('https://ivanteslenok.000webhostapp.com/ingredients.php')
+                $http.get('https://pizza-server.000webhostapp.com/ingredients.php')
                     .success(function(data) {
                         ingredients = data;
                         //console.log(data);
@@ -135,7 +135,7 @@
             var defered = $q.defer();
 
             if (isOnline) {
-                $http.post('https://ivanteslenok.000webhostapp.com/login.php', loginData)
+                $http.post('https://pizza-server.000webhostapp.com/login.php', loginData)
                     .success(function(data, status) {
                         defered.resolve(data);
                     })
@@ -155,7 +155,7 @@
             var defered = $q.defer();
 
             if (isOnline) {
-                $http.get('https://ivanteslenok.000webhostapp.com/userInfo.php?username=' + username)
+                $http.get('https://pizza-server.000webhostapp.com/userInfo.php?username=' + username)
                     .success(function(data) {
                         defered.resolve(data);
                     })
@@ -175,7 +175,7 @@
             var defered = $q.defer();
 
             if (isOnline) {
-                $http.post('https://ivanteslenok.000webhostapp.com/updateUser.php', userInfo)
+                $http.post('https://pizza-server.000webhostapp.com/updateUser.php', userInfo)
                     .success(function(data, status) {
                         defered.resolve(data);
                     })
@@ -195,7 +195,7 @@
             var defered = $q.defer();
 
             if (isOnline) {
-                $http.post('https://ivanteslenok.000webhostapp.com/registration.php', registrationData)
+                $http.post('https://pizza-server.000webhostapp.com/registration.php', registrationData)
                     .success(function(data, status) {
                         defered.resolve(data);
 

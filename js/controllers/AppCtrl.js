@@ -15,9 +15,9 @@
 
         // Меню ///////////////////////////////////////////////////////////////////////////////////////////////
 
-        var isLoggedIn = false;
+        var isLoggedIn;
 
-        if (window.localStorage.getItem('isLoggedIn') !== undefined) {
+        if (window.localStorage.getItem('isLoggedIn') !== null) {
             isLoggedIn = window.localStorage.getItem('isLoggedIn') === '0' ? false : true;
         } else {
             isLoggedIn = false;
