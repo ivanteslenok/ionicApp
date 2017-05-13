@@ -1,6 +1,6 @@
 <ion-modal-view>
     <ion-header-bar class="bar-balanced">
-        <h1 class="title">Добавление ингреиентов</h1>
+        <h1 class="title">Добавление ингредиентов</h1>
         <div class="buttons">
             <button class="button button-clear button-icon ion-android-close" ng-click="closeIngredients()">Закрыть</button>
         </div>
@@ -11,6 +11,7 @@
 
             <ion-slide>
                 <div class="box">
+                    <p class="title">Соусы</p>
                     <ion-checkbox ng-repeat="item in sauce" ng-model="item.added">
                         {{item.name}} - {{item.price}} р.
                     </ion-checkbox>
@@ -19,6 +20,7 @@
 
             <ion-slide>
                 <div class="box">
+                    <p class="title">Сыры</p>
                     <ion-checkbox ng-repeat="item in cheese" ng-model="item.added">
                         {{item.name}} - {{item.price}} р.
                     </ion-checkbox>
@@ -27,6 +29,7 @@
 
             <ion-slide>
                 <div class="box">
+                    <p class="title">Колбасы</p>
                     <ion-checkbox ng-repeat="item in sausage" ng-model="item.added">
                         {{item.name}} - {{item.price}} р.
                     </ion-checkbox>
@@ -35,6 +38,7 @@
 
             <ion-slide>
                 <div class="box">
+                    <p class="title">Мясо</p>
                     <ion-checkbox ng-repeat="item in meat" ng-model="item.added">
                         {{item.name}} - {{item.price}} р.
                     </ion-checkbox>
