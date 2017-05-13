@@ -80,7 +80,7 @@
     font-size: 14pt;
 }
 
-.ingredientsTitle {
+.pizzasIngredientsTitle {
     font-size: 14pt;
 }
 
@@ -165,6 +165,10 @@
     height: 77%;
 }
 
+.ingredientsTitle {
+    padding-bottom: 15px;
+}
+
 .scroll {
     height: 100%;
 }
@@ -210,17 +214,18 @@
     height: 70%;
 }
 
-.cartItem {
+.cartIngredients {
+    white-space: normal !important;
+}
+
+.cartBtnBlock {
     display: flex;
+    justify-content: space-around;
     align-items: center;
 }
 
-.cartDelBtnBlock {
-    margin-right: auto;
-}
-
-.cartDelBtnBlock button {
-    font-size: 25px;
+.cartBtnBlock button {
+    width: 25%;
 }
 
 .cartInfoBlock {
@@ -229,25 +234,10 @@
     margin: 5%;
 }
 
-.cartCountText {
-    font-size: 12pt !important;
+.count {
+    text-align: right;
     font-weight: bold;
-    padding-left: 7%;
-    padding-right: 7%;
-}
-
-.cartCountBlock {
-    margin-left: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.cartCountBlock button {
-    font-size: 25px !important;
-}
-
-.cartCountBlock :first-child {
-    margin-bottom: 10%;
+    color: #6b46e5;
 }
 
 .cartFooter {
@@ -316,6 +306,10 @@
 
 .info li {
     font-weight: bold;
+}
+
+.infoBtn {
+    text-align: center;
 }
 
 

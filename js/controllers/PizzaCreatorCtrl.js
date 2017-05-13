@@ -50,9 +50,13 @@
                         return elem.type === 'мясо';
                     });
 
+                    $scope.backBtnDisable = true;
+                    $scope.readyBtnDisable = false;
+                    $scope.nextBtnDisable = false;
                     $scope.modalIngredients.show();
                     DataService.hideLoading();
                     $scope.addBtnDisabled = false;
+
                 },
                 function(reason) {
                     DataService.hideLoading();
@@ -76,13 +80,19 @@
             if ($scope.items.length <= 0) {
                 $scope.addToCartBtnDisabled = true;
             }
-
-            console.log($scope.items);
         };
 
         // Закрытие модального окна ингредиентов
         $scope.closeIngredients = function() {
             $scope.modalIngredients.hide();
+        };
+
+        $scope.checkItems = function() {
+            if ($scope.items && $scope.items.length > 0) {
+                $scope.readyBtnDisable = false;
+            } else {
+                $scope.readyBtnDisable = true;
+            }
         };
 
         // Заполнение списка выбранных ингредиентов
@@ -105,8 +115,6 @@
                 $scope.addToCartBtnDisabled = false;
             }
 
-            console.log($scope.items);
-
             $scope.modalIngredients.hide();
         };
 
@@ -116,6 +124,27 @@
 
         $scope.previousSlide = function() {
             $ionicSlideBoxDelegate.previous();
+        };
+
+        $scope.slideChanged = function(index) {
+            switch (index) {
+                case 0:
+                    $scope.backBtnDisable = true;
+                    $scope.nextBtnDisable = false;
+                    break;
+                case 1:
+                    $scope.backBtnDisable = false;
+                    $scope.nextBtnDisable = false;
+                    break;
+                case 2:
+                    $scope.backBtnDisable = false;
+                    $scope.nextBtnDisable = false;
+                    break;
+                case 3:
+                    $scope.backBtnDisable = false;
+                    $scope.nextBtnDisable = true;
+                    break;
+            }
         };
     }
 })();

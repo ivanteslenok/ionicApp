@@ -66,7 +66,6 @@
                 $http.get('http://ivanteslenok.esy.es/index.php')
                     .success(function(data) {
                         pizzas = data;
-                        //console.log(data);
                         defered.resolve(data);
                     })
                     .error(function() {
@@ -112,7 +111,6 @@
                 $http.get('http://ivanteslenok.esy.es/ingredients.php')
                     .success(function(data) {
                         ingredients = data;
-                        //console.log(data);
                         defered.resolve(data);
                     })
                     .error(function() {
@@ -275,8 +273,6 @@
 
                     showAlert('Пицца "' + shoppingCartObj.pizzaName + ' ' + shoppingCartObj.pizzaSize + '" добавлена в корзину', 'Количество заказываемых пицц может быть изменено в корзине');
 
-                    console.log(shoppingCart);
-
                     return true;
                 }
             });
@@ -347,9 +343,8 @@
                         testCart.pizzaCount++;
                     }
 
-                    showAlert('Пицца добавлена в корзину', 'Количество заказываемых пицц может быть изменено в корзине');
-
-                    console.log(shoppingCart);
+                    showAlert('Пицца добавлена в корзину',
+                        'Количество заказываемых пицц может быть изменено в корзине');
 
                     return true;
                 }

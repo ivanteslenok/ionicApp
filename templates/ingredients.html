@@ -7,12 +7,12 @@
     </ion-header-bar>
 
     <ion-content class="ingredientsContent">
-        <ion-slide-box class="ingredientsSlider">
+        <ion-slide-box class="ingredientsSlider" on-slide-changed="slideChanged(index)">
 
             <ion-slide>
                 <div class="box">
-                    <p class="title">Соусы</p>
-                    <ion-checkbox ng-repeat="item in sauce" ng-model="item.added">
+                    <h3 class="title ingredientsTitle">Соусы</h3>
+                    <ion-checkbox class="checkbox-balanced" ng-repeat="item in sauce" ng-model="item.added">
                         {{item.name}} - {{item.price}} р.
                     </ion-checkbox>
                 </div>
@@ -20,8 +20,8 @@
 
             <ion-slide>
                 <div class="box">
-                    <p class="title">Сыры</p>
-                    <ion-checkbox ng-repeat="item in cheese" ng-model="item.added">
+                    <h3 class="title ingredientsTitle">Сыры</h3>
+                    <ion-checkbox class="checkbox-balanced" ng-repeat="item in cheese" ng-model="item.added">
                         {{item.name}} - {{item.price}} р.
                     </ion-checkbox>
                 </div>
@@ -29,8 +29,8 @@
 
             <ion-slide>
                 <div class="box">
-                    <p class="title">Колбасы</p>
-                    <ion-checkbox ng-repeat="item in sausage" ng-model="item.added">
+                    <h3 class="title ingredientsTitle">Колбасы</h3>
+                    <ion-checkbox class="checkbox-balanced" ng-repeat="item in sausage" ng-model="item.added">
                         {{item.name}} - {{item.price}} р.
                     </ion-checkbox>
                 </div>
@@ -38,8 +38,8 @@
 
             <ion-slide>
                 <div class="box">
-                    <p class="title">Мясо</p>
-                    <ion-checkbox ng-repeat="item in meat" ng-model="item.added">
+                    <h3 class="title ingredientsTitle">Мясо</h3>
+                    <ion-checkbox class="checkbox-balanced" ng-repeat="item in meat" ng-model="item.added">
                         {{item.name}} - {{item.price}} р.
                     </ion-checkbox>
                 </div>
@@ -50,14 +50,14 @@
 
     <ion-footer-bar class="ingredientsFooter">
         <div class="button-bar">
-            <button class="button button-block button-calm" ng-click="previousSlide()">
+            <button class="button button-block button-calm" ng-disabled="backBtnDisable" ng-click="previousSlide()">
                 <!--<i class="icon ion-chevron-left ingredientsIconLeft"></i>-->
                 Назад
             </button>
-            <button class="button button-block button-royal" ng-click="createList()">
+            <button class="button button-block button-royal" ng-disabled="readyBtnDisable" ng-click="createList()">
                 Готово
             </button>
-            <button class="button button-block button-calm" ng-click="nextSlide()">
+            <button class="button button-block button-calm" ng-disabled="nextBtnDisable" ng-click="nextSlide()">
                 Далее
                 <!--<i class="icon ion-chevron-right ingredientsIconRight"></i>-->
             </button>

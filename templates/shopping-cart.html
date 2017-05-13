@@ -13,19 +13,19 @@
     </ion-header-bar>
 
     <ion-content class="has-subheader cartContent">
-        <div class="item cartItem" ng-repeat="item in cartItems">
-            <div class="cartDelBtnBlock">
-                <button class="button button-assertive ion-close-circled" ng-click="deleteItem(item)"></button>
-            </div>
+        <div class="item" ng-repeat="item in cartItems">
             <div class="cartInfoBlock">
-                <h3>{{item.pizzaName}}</h3>
-                <h3>{{item.pizzaSize}}</h3>
-                <h3>Количество: {{item.pizzaCount}}</h3>
-                <h3>{{item.ingredients}}</h3>
+                <b>{{item.pizzaName}} ({{item.pizzaSize}})</b>
+                <p class="cartIngredients">{{item.ingredients}}</p>
+                <div class="count">Кол-во: {{item.pizzaCount}}</div>
             </div>
-            <div class="cartCountBlock">
-                <button class="button button-calm icon ion-plus-circled cartCountControl" ng-click="pizzaCountMore(item)"></button>
-                <button class="button button-calm icon ion-minus-circled cartCountControl" onclick="event.preventDefault()" ng-click="pizzaCountLess(item)"></button>
+            <div class="cartBtnBlock">
+                <button class="button button-assertive icon ion-close-circled" ng-click="deleteItem(item)">
+                    <!--<i class="icon"></i>
+                    Убрать-->
+                </button>
+                <button class="button button-royal icon ion-minus-circled cartCountControl" onclick="event.preventDefault()" ng-click="pizzaCountLess(item)"></button>
+                <button class="button button-royal icon ion-plus-circled cartCountControl" ng-click="pizzaCountMore(item)"></button>
             </div>
         </div>
     </ion-content>
