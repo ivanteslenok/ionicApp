@@ -38,6 +38,11 @@
     color: white !important;
 }
 
+.addToCartButton {
+    width: 60% !important;
+    margin: 0 auto !important;
+}
+
 .addToCartButton,
 .addToCartButton:enabled {
     background-color: #dc143c;
@@ -71,6 +76,11 @@
 
 .registrationFooter button {
     font-size: 14pt !important;
+}
+
+.loginBtn {
+    width: 60% !important;
+    margin: 0 auto !important;
 }
 
 
@@ -114,11 +124,11 @@
     padding: 3%;
     border: 0.5px solid darkgrey;
     border-radius: 1%;
-    height: 77%;
+    height: 79%;
 }
 
 .pizzaFooter {
-    height: 14%;
+    height: 12%;
 }
 
 .pizzaButton {
@@ -139,11 +149,11 @@
     padding: 3%;
     border: 0.5px solid dimgray;
     border-radius: 1%;
-    height: calc(90% - 90px);
+    height: 79%;
 }
 
 .pizzaCreatorFooter {
-    height: 90px;
+    height: 12%;
 }
 
 .pizzaCreatorDeleteButton {
@@ -211,7 +221,7 @@
     padding: 3%;
     border: 0.5px solid dimgray;
     border-radius: 1%;
-    height: 70%;
+    height: 72%;
 }
 
 .cartIngredients {
@@ -241,11 +251,13 @@
 }
 
 .cartFooter {
-    height: 14%;
+    height: 12%;
 }
 
 .cartFooter button {
     font-size: 14pt !important;
+    width: 60% !important;
+    margin: 0 auto !important;
 }
 
 

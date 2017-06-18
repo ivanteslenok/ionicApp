@@ -2,7 +2,7 @@
     <ion-content class="padding">
         <ion-refresher on-refresh="refreshData()"></ion-refresher>
         <ion-list>
-            <ion-item ng-repeat="pizza in pizzas" href="#/app/pizzas/{{pizza.id}}">
+            <ion-item ng-repeat="pizza in pizzas">
                 <img class="pizzaImg" ng-src="http://ivanteslenok.esy.es/img/{{pizza.name}}.jpg" />
 
                 <h1 class="title">{{pizza.name}}</h1>
@@ -12,8 +12,8 @@
                 <span class="ingredients">{{pizza.ingredients}}</span>
 
                 <div class="button-bar pizzasButtonBar">
-                    <button class="button button-calm">Подробнее</button>
-                    <button class="button addToCartButton" onclick="event.preventDefault()" ng-click="addPizzaToCart({{pizza.id}})">В корзину</button>
+                    <a class="button button-calm" href="#/app/pizzas/{{pizza.id}}">Подробнее</a>
+                    <button class="button addToCartButton" ng-click="addPizzaToCart({{pizza.id}})">В корзину</button>
                 </div>
             </ion-item>
         </ion-list>
